@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+
+/* General Styling */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Styling for the left box (with background and text) */
+.box1 {
+    position: relative;
+    width: 60%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
+}
+
+.bg-image {
+    height: 100vh;
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    z-index: -2;
+}
+
+.overlay {
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background: black;
+    opacity: 0.9;
+    z-index: -1;
+}
+
+h2 {
+    margin-top: 15vh;
+    color: white;
+    font-size: 68px;
+    font-family: "Cinzel Decorative", serif;
+}
+
+h2 span {
+    font-size: 102px;
+}
+
+.logo-image {
+    width: 300px;
+    height: 300px;
+}
+
+/* Styling for the right box (form section) */
+.box2 {
+    width: 40%;
+    height: 100vh;
+    background: #FAF9F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Styling for the form */
+.register-form {
+    background-color: #FAF9F6;
+    padding: 50px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+}
+
+.divider {
+    width: 50%;
+    margin-top: -15px;
+    margin-bottom: 20px;
+}
+
+/* Styling for the form inputs */
+.form-input {
+    width: 100%;
+    padding: 10px;
+    margin: 20px 0;
+    border: 1px solid #a3a3a3;
+    border-radius: 15px;
+    font-size: 16px;
+    background-color: white;
+}
+
+.form-input:focus {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #4d3104;
+}
+
+/* Styling for the submit button */
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #7a4e06;
+    color: white;
+    margin-top: 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.submit-btn:hover {
+    background-color: #4d3104;
+}
+
+/* Optional: Styling for the form header */
+h3 {
+    font-family: "Cinzel Decorative", serif;
+    font-size: 2rem;
+    color: #7a4e06;
+}
+
+/* Styling for the signup link */
+.signup-text a {
+    color: black;
+    text-decoration: none;
+}
+
+.signup-text a:hover {
+    text-decoration: underline;
+}
+
+/* Subheading styling */
+.sub-heading {
+    font-family: "Cinzel Decorative", serif;
+    color: white;
+}
