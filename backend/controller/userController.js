@@ -8,7 +8,7 @@ async function userSignup(req,res){
        
        try {
            const existingUser = await User.findOne({ email });
-           if (existingUser) return res.status(400).json({ msg: 'User already exists' });
+           if (existingUser) return res.status(409).json({ msg: 'User already exists',status:"error" });
    
            const hashedPassword = await bcrypt.hash(password, 10);
            
@@ -23,9 +23,9 @@ async function userSignup(req,res){
    
            await User.create(newUser);
    
-           res.status(201).json({ msg: 'Registration successful' });
+           res.status(201).json({ msg: 'Registration successful',status:"success" });
        } catch (error) {
-           res.status(500).json({ msg: 'Server error'+error });
+           res.status(500).json({ msg: 'Server error. Try Later',status:"error" });
        }
    }
 
