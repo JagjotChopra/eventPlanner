@@ -4,6 +4,7 @@ import bg from '../../assets/pexels-expect-best-79873-1243337.jpg';
 import logo from '../../assets/R-removebg-preview.png';
 import check from '../../assets/check.png';
 import cross from '../../assets/remove.png';
+import axios from 'axios';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -11,8 +12,8 @@ const Register = () => {
     });
     const { name, email, password, phone, address } = formData;
     const [errors, setErrors] = useState({}); // Track validation errors
-    const [showModal, setShowModal] = useState(true);
-    const [modelMessage, setModelMessage] = useState({status:"success"});
+    const [showModal, setShowModal] = useState(false);
+    const [modelMessage, setModelMessage] = useState({});
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,6 +49,29 @@ const Register = () => {
             // If there are validation errors, set them
             setErrors(fieldErrors);
             return;
+        }
+
+        try {
+            const res = await axios.post('http://localhost:9000/api/v1/user/register', formData);
+
+            // Check if registration was successful
+            if (res.status === 201) { // Assuming 201 is the status code for successful registration
+                //alert(res.data.msg);
+                setModelMessage(res.data);
+                setShowModal(true);
+                //navigate('/login'); // Navigate to the login page on success
+            }
+        } catch (err) {
+            //alert('Error during registration');
+            if(err.response.status == 409){
+                setModelMessage({msg:'Email Id Already Exist',status:'error'});
+                setShowModal(true);
+            }
+            else{
+              setModelMessage({msg:'Network Error. Try Later',status:'error'});
+              setShowModal(true);
+            }
+            
         }
 
     };
