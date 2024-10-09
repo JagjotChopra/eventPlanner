@@ -9,11 +9,45 @@ const Register = () => {
         name: '', email: '', password: '', phone: '', address: ''
     });
     const { name, email, password, phone, address } = formData;
+    const [errors, setErrors] = useState({}); // Track validation errors
    
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        setErrors({ ...errors, [e.target.name]: '' }); // Clear errors as user types
+    
      };
 
+      // Validation function
+    const validateFields = () => {
+        const newErrors = {};
+
+        // Password validation (min 6 characters)
+        if (!password || password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters long.';
+        }
+
+        // Phone validation (must be digits, 10 characters)
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(phone)) {
+            newErrors.phone = 'Phone number must be 10 digits long.';
+        }
+
+
+        return newErrors;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const fieldErrors = validateFields();
+
+        if (Object.keys(fieldErrors).length > 0) {
+            // If there are validation errors, set them
+            setErrors(fieldErrors);
+            return;
+        }
+
+    };
     return (
             <div className="container">
                 <div className="box1">
@@ -24,7 +58,7 @@ const Register = () => {
                     <p className="sub-heading">Your One-Stop Solution for Hassle-Free Event Planning and Venue Booking.</p>
                 </div>
                 <div className="box2">
-                    <form className="register-form">
+                    <form className="register-form" onSubmit={handleSubmit}>
                         <h3>Create An Account</h3>
                         <hr className="divider" />
 
@@ -56,6 +90,8 @@ const Register = () => {
                             className='form-input'
                             required
                         />
+                        {errors.password && <p className="error-text">{errors.password}</p>}
+
                         <input
                             type="text"
                             name="phone"
@@ -65,6 +101,8 @@ const Register = () => {
                             className='form-input'
                             required
                         />
+                         {errors.phone && <p className="error-text">{errors.phone}</p>}
+
                         <input
                             type="text"
                             name="address"
