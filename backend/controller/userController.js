@@ -47,4 +47,4 @@ async function userSignup(req,res){
         res.status(500).json({ msg: 'Server error',status:'error' });
     }
 }   
-   module.exports={userSignup};
+   module.exports={userSignup,userLogin};
