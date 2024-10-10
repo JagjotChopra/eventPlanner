@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import './register.css'; 
 import bg from '../../assets/pexels-expect-best-79873-1243337.jpg';
 import logo from '../../assets/R-removebg-preview.png';
-
+import check from '../../assets/check.png';
+import cross from '../../assets/remove.png';
+import axios from 'axios';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -10,7 +12,9 @@ const Register = () => {
     });
     const { name, email, password, phone, address } = formData;
     const [errors, setErrors] = useState({}); // Track validation errors
-   
+    const [showModal, setShowModal] = useState(false);
+    const [modelMessage, setModelMessage] = useState({});
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         setErrors({ ...errors, [e.target.name]: '' }); // Clear errors as user types
@@ -47,8 +51,34 @@ const Register = () => {
             return;
         }
 
+        try {
+            const res = await axios.post('http://localhost:9000/api/v1/user/register', formData);
+
+            // Check if registration was successful
+            if (res.status === 201) { // Assuming 201 is the status code for successful registration
+                //alert(res.data.msg);
+                setModelMessage(res.data);
+                setShowModal(true);
+                //navigate('/login'); // Navigate to the login page on success
+            }
+        } catch (err) {
+            //alert('Error during registration');
+            if(err.response.status == 409){
+                setModelMessage({msg:'Email Id Already Exist',status:'error'});
+                setShowModal(true);
+            }
+            else{
+              setModelMessage({msg:'Network Error. Try Later',status:'error'});
+              setShowModal(true);
+            }
+            
+        }
+
     };
-    return (
+    const handleClose = () => {
+        setShowModal(false);
+    };
+    return (<>
             <div className="container">
                 <div className="box1">
                     <img src={bg} className="bg-image" alt="background" />
@@ -117,6 +147,27 @@ const Register = () => {
                     </form>
                 </div>
             </div>
+            {showModal && (
+                <div className="modal-overlay">
+                    {
+                        modelMessage.status == "success" ? <div className="modal-content">
+                            <img src={check} style={{width:'80px',height:'80px',marginTop:'30px'}} />
+                            <h1 style={{textAlign:'center'}}>Success</h1>
+                            <p>{modelMessage.msg}</p>
+                            <button className='btn-login' onClick={handleClose} >Ok</button>
+                        </div> :
+                            <div className="modal-content">
+                                <button className="close-btn" onClick={handleClose} >X</button>
+                                <img src={cross} style={{width:'80px',height:'80px',marginTop:'30px'}} />
+                                <h1 style={{textAlign:'center'}}>Error</h1>
+                                <p>{modelMessage.msg}</p>
+                            </div>
+                    }
+
+
+                </div>
+            )}
+            </>
     );
 };
 
