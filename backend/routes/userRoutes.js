@@ -9,4 +9,10 @@ userRouter.route('/register').post((request,response)=>{
     userController.userSignup(request,response);
 })
 
+userRouter.route('/login').post((request,response)=>{
+    console.log("Request come user login")
+    userController.userLogin(request,response);
+
+})
+
 module.exports=userRouter;
