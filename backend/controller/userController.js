@@ -40,8 +40,9 @@ async function userSignup(req,res){
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials',status:'error' });
 
-        
-        res.json({ role: user.role,msg:"Login Successful",status:'success' });
+        const token = jwt.sign({ user_id: user.user_id, role: user.role }, '123456', { expiresIn: '1h' });
+      
+        res.json({token,role: user.role,msg:"Login Successful",status:'success' });
     } catch (error) {
         res.status(500).json({ msg: 'Server error',status:'error' });
     }
