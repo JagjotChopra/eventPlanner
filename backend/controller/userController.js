@@ -29,4 +29,22 @@ async function userSignup(req,res){
        }
    }
 
-   module.exports={userSignup};
+
+   async function userLogin(req,res){
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ msg: "User Doesn't Exist",status:'error' });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials',status:'error' });
+
+        const token = jwt.sign({ user_id: user.user_id, role: user.role }, '123456', { expiresIn: '1h' });
+      
+        res.json({token,role: user.role,msg:"Login Successful",status:'success' });
+    } catch (error) {
+        res.status(500).json({ msg: 'Server error',status:'error' });
+    }
+}   
+   module.exports={userSignup,userLogin};
