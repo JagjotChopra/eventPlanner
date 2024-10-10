@@ -29,4 +29,21 @@ async function userSignup(req,res){
        }
    }
 
+
+   async function userLogin(req,res){
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ msg: "User Doesn't Exist",status:'error' });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials',status:'error' });
+
+        
+        res.json({ role: user.role,msg:"Login Successful",status:'success' });
+    } catch (error) {
+        res.status(500).json({ msg: 'Server error',status:'error' });
+    }
+}   
    module.exports={userSignup};
