@@ -23,6 +23,7 @@ const Login = () => {
             try {
                 const res = await axios.post('http://localhost:9000/api/v1/user/login', formData);
                 if (res.status === 201) { // Assuming 201 is the status code for successful login
+                    localStorage.setItem('token', res.data.token);//Here storage the token
                     alert(res.data.msg);
                     navigate('/home');
                 }
