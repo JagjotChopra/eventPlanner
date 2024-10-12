@@ -20,16 +20,29 @@ const Login = () => {
         e.preventDefault();
 
        
-            try {
-                const res = await axios.post('http://localhost:9000/api/v1/user/login', formData);
-                if (res.status === 201) { // Assuming 201 is the status code for successful login
-                    localStorage.setItem('token', res.data.token);//Here storage the token
-                    alert(res.data.msg);
-                    navigate('/home');
-                }
-            } catch (err) {
-                alert('Error during login');
+        try {
+            const res = await axios.post('http://localhost:9000/api/v1/user/login', formData);
+    
+            if (res && res.status === 200) {
+                localStorage.setItem('token', res.data.token);
+                alert(res.data.msg);
+                navigate('/home');
+            } else {
+                alert('Unexpected response from server.');
+                console.log('Server response:', res);
             }
+        } catch (err) {
+            if (err.response) {
+                alert(`Error: ${err.response.data.msg || 'Unknown error occurred'}`);
+            } else if (err.request) {
+                alert('No response from the server. Please check if the backend is running.');
+            } else {
+                alert('An error occurred while trying to log in. Please try again later.');
+            }
+            
+            console.error('Error during login:', err);
+        }
+
         
     };
 
