@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './login.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import bg from '../../assets/pexels-expect-best-79873-1243337.jpg';
 import logo from '../../assets/R-removebg-preview.png';
 
+import ForgotPassword from '../ForgotPassword/forgotpassword';
 
 const Login = () => {
     const [formData, setFormData] = useState({
         email: '', password: ''
     });
     const { email, password } = formData;
+    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
 
    
@@ -72,9 +74,9 @@ const Login = () => {
                         className='form-input'
                         required
                     />
-                    <p style={{textAlign:'right'}}>Forgot Password ?</p>
+                    <p style={{textAlign:'right',color: '#007bff',fontWeight: 'bold',cursor:'pointer'}} className="signup-text" onClick={() => setShowModal(true)} >Forgot Password?</p>
                    <button type="submit" className="submit-btn">Login</button><br />
-                    <p className="signup-text">Don't have an account? <a href="/Register">Sign Up</a></p>
+                    <p className="signup-text">Don't have an account? <Link to='/register'>Sign Up</Link></p>
                 </form>
             </div>
             <div className="box1">
@@ -84,6 +86,19 @@ const Login = () => {
                 <img src={logo} className="logo-image" alt="logo" />
                 <p className="sub-heading">Your One-Stop Solution for Hassle-Free Event Planning and Venue Booking</p>
             </div>
+
+            {/* Modal for Forgot Password */}
+            {showModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <span className="close" onClick={() => setShowModal(false)}>&times;</span>
+                        <h3>Forgot Password</h3>
+                        <p>Enter your email address to reset your password</p>
+                        <ForgotPassword/>
+                    
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
