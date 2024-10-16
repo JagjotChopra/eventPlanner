@@ -34,6 +34,7 @@ const ForgotPassword = () => {
                     name="email" // Add the 'name' attribute so handleChange works correctly
                     placeholder="Enter your email"
                     className="form-input"
+                    required
                     value={email}
                     onChange={handleChange} // Call handleChange to update formData
                 />

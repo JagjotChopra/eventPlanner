@@ -13,7 +13,22 @@ const ResetPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-       
+        if (password !== confirmPassword) {
+            setResponse({message:'Passwords do not match',status:'error'});
+            return;
+        }
+        else if (!password || password.length < 6) {
+             setResponse({message:'Password must be at least 6 characters long',status:'error'});
+        }
+        else{
+            try {
+                // No need to assign the result to a variable if it's not used
+                const res = await axios.post(`http://localhost:9000/api/v1/user/reset-password?token=${token}`, { password });
+                setResponse(res.data);
+            } catch (error) {
+                setResponse(error.response.data);
+            }
+        }
     };
 
     return (
@@ -28,7 +43,7 @@ const ResetPassword = () => {
                     className='reset-input-password'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    
+                    required
                 />
                 <input
                     type="password"
@@ -37,6 +52,7 @@ const ResetPassword = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     style={{marginTop:'20px'}}
+                    required
                 />
                 <button type="submit" className='submit-btn' style={{marginTop:'20px'}}>Reset Password</button>
                 {response &&  response.status=="error"?<p style={{color:'red'}}>{response.message}</p>:<p style={{color:'green'}} >{response.message}</p> } {/* Display the message */}
