@@ -15,4 +15,14 @@ userRouter.route('/login').post((request,response)=>{
 
 })
 
+userRouter.route('/forgotpassword').post((request,response)=>{
+    console.log("Request come for forgot password ")
+    userController.forgotPassword(request,response);
+
+})
+userRouter.route('/reset-password').post((request,response)=>{
+    console.log("Request come for reset password ")
+    userController.resetPassword(request,response);
+})
+
 module.exports=userRouter;
