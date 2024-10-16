@@ -2,6 +2,7 @@ const User=require('../model/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { sendEmail } = require('../utils/sendEmail');
+const tokenBlacklist = new Set();
 
 async function userSignup(req,res){
        const { name, email, password, phone, address } = req.body;
@@ -77,4 +78,51 @@ async function forgotPassword(req, res) {
     }
 }
 
-   module.exports={userSignup,userLogin, forgotPassword};
+
+async function resetPassword(req, res) {
+    const { password } = req.body;
+    const token = req.query.token;
+
+    try {
+        // Log token to check if it's being received correctly
+        console.log("Token from URL:", token);
+
+        // Check if the token is blacklisted
+        if (tokenBlacklist.has(token)) {
+            return res.status(400).json({ message: 'Password Already Reset',status:"error" });
+        }
+
+        const decoded = jwt.verify(token, '123456'); // Verify the token with the correct secret key
+        const user = await User.findById(decoded.user_id);
+
+        // Log user details to ensure correct user is fetched
+        console.log("Decoded user_id:", decoded.user_id);
+        console.log("User in DB:", user);
+
+        // Token expiration time in milliseconds (decoded.exp is in seconds)
+        // const decoded_expiration_time = decoded.exp * 1000;
+
+        // // Add logs for debugging
+        // const date = new Date(decoded_expiration_time);
+        // const options = { timeZone: 'America/New_York', hour12: false, year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        // const decoded_expired_time_formatted = new Intl.DateTimeFormat('en-US', options).format(date);
+        // console.log("User reset token expiration (formatted):", decoded_expired_time_formatted);
+
+        // // Check if the token is expired by comparing decoded_expiration_time with current time
+        // if (!user || decoded_expiration_time < Date.now()) {
+        //     return res.status(400).json({ message: 'Invalid or expired token' });
+        // }
+
+        // Invalidate the token by adding it to the blacklist
+        tokenBlacklist.add(token);
+        // Update user's password and clear reset token fields
+        user.password = await bcrypt.hash(password, 10);
+        await user.save();
+
+        res.json({ message: 'Password reset successful',status:"success" });
+    } catch (error) {
+        return res.status(400).json({ message: 'Invalid or expired token',status:"error" });
+    }
+}
+
+   module.exports={userSignup,userLogin, forgotPassword, resetPassword};
