@@ -27,8 +27,8 @@ const Login = () => {
     
             if (res && res.status === 200) {
                 localStorage.setItem('token', res.data.token);
-                alert(res.data.msg);
-                navigate('/home');
+               // alert(res.data.msg);
+                navigate('/changepassword');
             } else {
                 alert('Unexpected response from server.');
                 console.log('Server response:', res);
