@@ -6,7 +6,7 @@ const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
- 
+  const [response, setResponse] = useState({});
   const navigate = useNavigate();
 
   // JWT token is stored in localStorage after login
@@ -16,11 +16,31 @@ const ChangePassword = () => {
       navigate('/login');
     }
   }, [])
-
+  
+  const validatePasswordForm = (oldPassword, newPassword, confirmPassword) => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      return 'All fields are required';
+    }
+    if (newPassword !== confirmPassword) {
+      return 'New and Confirm passwords do not match';
+    }
+    if (newPassword.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+    return null;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
+    const validationError = validatePasswordForm(oldPassword, newPassword, confirmPassword);
+    if (validationError) {
+      setResponse({status:'error',message:validationError});
+    }
+    else{
+        // sending API request code will come
+        
+  }
   };
 
   return (
@@ -57,6 +77,7 @@ const ChangePassword = () => {
               required
             />
             <button type="submit" className='submit-btn' style={{ marginTop: '20px' }}>Change Password</button>
+            {response && response.status === "error" ? <p style={{ color: 'red' }}>{response.message}</p> : <p style={{ color: 'green' }} >{response.message}</p>} 
           </form>
         </div>
       </div>
