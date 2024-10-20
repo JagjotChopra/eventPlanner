@@ -30,4 +30,9 @@ userRouter.route('/verify-password').post((request,response)=>{
     userController.verifyOldPassword(request,response);
 })
 
+userRouter.route('/update-password').post((request,response)=>{
+    console.log("Request come for Update password ")
+    userController.updatePassword(request,response);
+})
+
 module.exports=userRouter;

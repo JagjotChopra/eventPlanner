@@ -169,4 +169,26 @@ const verifyOldPassword = async (req, res) => {
     }
 };
 
-  module.exports={userLogin, userSignup, forgotPassword, resetPassword, verifyOldPassword};
+const updatePassword = async (req, res) => {
+    const {newPassword } = req.body;
+    const token = req.headers.authorization.split(' ')[1]; // Extract JWT token from the Authorization header
+    
+    try {
+        const decoded = jwt.verify(token, '123456');
+       
+      const user = await User.findById(decoded.id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      await user.save();
+  
+      res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+  module.exports={userLogin, userSignup, forgotPassword, resetPassword, verifyOldPassword, updatePassword};
