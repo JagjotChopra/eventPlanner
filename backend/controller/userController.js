@@ -42,7 +42,7 @@ async function userSignup(req,res){
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials',status:'error' });
 
-        const token = jwt.sign({ user_id: user.user_id, role: user.role }, '123456', { expiresIn: '1h' });
+        const token = jwt.sign({ user_id: user._id, role: user.role }, '123456', { expiresIn: '1h' });
       
         res.json({token,role: user.role,msg:"Login Successful",status:'success' });
     } catch (error) {
@@ -134,9 +134,10 @@ const verifyOldPassword = async (req, res) => {
 
         // Verify the JWT token and extract the payload (including userId)
         const decoded = jwt.verify(token, '123456');
-        console.log("Decoded user_id:", decoded.id);
+        console.log("Decoded :", decoded);
+        console.log("Decoded user_id:", decoded.user_id);
 
-        const userId = decoded.id; // Extract userId from the token
+        const userId = decoded.user_id; // Extract userId from the token
         console.log("UserID in DB:", userId);
         console.log("password Coming from front end:", oldPassword);
 
@@ -176,7 +177,7 @@ const updatePassword = async (req, res) => {
     try {
         const decoded = jwt.verify(token, '123456');
        
-      const user = await User.findById(decoded.id);
+      const user = await User.findById(decoded.user_id);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
