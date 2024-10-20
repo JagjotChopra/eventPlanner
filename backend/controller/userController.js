@@ -42,7 +42,7 @@ async function userSignup(req,res){
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials',status:'error' });
 
-        const token = jwt.sign({ user_id: user.user_id, role: user.role }, '123456', { expiresIn: '1h' });
+        const token = jwt.sign({ user_id: user._id, role: user.role }, '123456', { expiresIn: '1h' });
       
         res.json({token,role: user.role,msg:"Login Successful",status:'success' });
     } catch (error) {
@@ -125,4 +125,71 @@ async function resetPassword(req, res) {
     }
 }
 
-   module.exports={userSignup,userLogin, forgotPassword, resetPassword};
+const verifyOldPassword = async (req, res) => {
+    const { oldPassword } = req.body; // Old password entered by user
+    const token = req.headers.authorization.split(' ')[1]; // Extract JWT token from the Authorization header
+
+    try {
+        console.log("Token from URL:", token);
+
+        // Verify the JWT token and extract the payload (including userId)
+        const decoded = jwt.verify(token, '123456');
+        console.log("Decoded :", decoded);
+        console.log("Decoded user_id:", decoded.user_id);
+
+        const userId = decoded.user_id; // Extract userId from the token
+        console.log("UserID in DB:", userId);
+        console.log("password Coming from front end:", oldPassword);
+
+        // Find the user in the database by the userId
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Compare the provided password with the stored hashed password
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Incorrect old password' });
+        }
+
+        // Password matched, proceed with further logic like resetting password or other actions
+        res.json({ message: 'Old password verified' });
+
+    } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Token has expired' });
+        } else if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        } else {
+            console.error("Error during password verification:", error);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+};
+
+const updatePassword = async (req, res) => {
+    const {newPassword } = req.body;
+    const token = req.headers.authorization.split(' ')[1]; // Extract JWT token from the Authorization header
+    
+    try {
+        const decoded = jwt.verify(token, '123456');
+       
+      const user = await User.findById(decoded.user_id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      await user.save();
+  
+      res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+  module.exports={userLogin, userSignup, forgotPassword, resetPassword, verifyOldPassword, updatePassword};

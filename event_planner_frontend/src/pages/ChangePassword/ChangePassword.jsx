@@ -1,5 +1,6 @@
  
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const ChangePassword = () => {
@@ -32,15 +33,45 @@ const ChangePassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validationError = validatePasswordForm(oldPassword, newPassword, confirmPassword);
+
     if (validationError) {
       setResponse({status:'error',message:validationError});
     }
     else{
-        // sending API request code will come
+      try {
+        // Send request with JWT token in the headers
+        const verifyRes = await axios.post(
+          'http://localhost:9000/api/v1/user/verify-password',
+          { oldPassword },
+          { headers: { Authorization: `Bearer ${token}` } }  // Send token in headers
+        );
+  
+        if (verifyRes.data.message === 'Old password verified') {
+          // Update password
+          const updateRes = await axios.post(
+            'http://localhost:9000/api/v1/user/update-password',
+            { newPassword },
+            { headers: { Authorization: `Bearer ${token}` } }  // Send token in headers
+          );
+  
+          setResponse({status:'success',message:updateRes.data.message}); 
+        }
+      } catch (error) {
+        console.log(error);
+        if(error.response.data.message=="Token has expired"||error.response.data.message=="Invalid token"){
+          alert(error.response.data.message+". "+"Please Login Again"); 
+          navigate('/login');
+        }
+        else{
+          setResponse({status:'error',message:error.response.data.message}); 
+        }
         
-  }
+      }
+    }
+
+   
   };
 
   return (
@@ -51,7 +82,7 @@ const ChangePassword = () => {
           <form onSubmit={handleSubmit} className='reset-form' style={{ marginTop: '10px' }}>
             <input
               type="password"
-              placeholder="New Password"
+              placeholder="Old Password"
               className='reset-input-password'
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
@@ -59,7 +90,7 @@ const ChangePassword = () => {
             />
             <input
               type="password"
-              placeholder="Confirm New Password"
+              placeholder="New Password"
               className='reset-input-password'
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
