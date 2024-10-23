@@ -16,7 +16,24 @@ const upload = multer({ storage: storage });
 
 
 async function addNewEventCategory(req, res) {
-    
+    const { name, description } = req.body;
+    const image = req.file ? req.file.filename : null; // Image is now coming from req.file
+
+   console.log(name, description, image);
+    try {
+        const newCategory = new EventCategory({ name, description, image });
+        let category=await newCategory.save();
+        
+        res.status(201).json(
+            {
+                success: true,
+                message: 'Data and image uploaded successfully',
+                data:category
+              }
+        );
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
 async function getAllEventCategory (req, res) {
