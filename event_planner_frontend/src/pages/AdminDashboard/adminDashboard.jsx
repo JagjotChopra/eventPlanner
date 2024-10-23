@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css'; // Import CSS for styling
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
@@ -10,9 +10,20 @@ const AdminDashboard = () => {
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+  const navigate=useNavigate();
 
   const logout = () => {
-  
+   // Ask for confirmation
+   const isConfirmed = window.confirm("Are you sure you want to logout?");
+    
+   // If the user confirms, proceed with logout
+   if (isConfirmed) {
+       // Remove token from local storage
+       localStorage.removeItem('token'); 
+       
+       navigate('/login')
+      // window.location.href = '/login'; // Update the path as needed
+   }
 };
   return (
     <div >
