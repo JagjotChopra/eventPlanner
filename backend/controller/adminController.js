@@ -37,7 +37,21 @@ async function addNewEventCategory(req, res) {
 }
 
 async function getAllEventCategory (req, res) {
-   
+    try {
+        const categories = await EventCategory.find();
+        data=categories.map((category)=>{
+        return {...category.toObject(),image:"http://localhost:9000/uploads/"+category.image}
+        })
+        console.log(data);
+        res.status(200).json(
+            {
+                success: true,
+                data
+              }
+        );
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
 async function updateEventCategory (req, res) {
