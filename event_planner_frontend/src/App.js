@@ -19,7 +19,12 @@ function App() {
         <Route path="/" element={<Login/>} exact />
 
         <Route  element={<PrivateRoutes role="client"/>} >
-           <Route path="/changepassword" element={<ChangePassword/>} /> 
+        <Route path="/adminDashboard" element={<AdminDashboard/>} >
+           <Route index element={<AdminAddCategory />} />
+           <Route path="adminAddCategory"  element={<AdminAddCategory/>} /> 
+           <Route path="adminChangepassword" element={<ChangePassword/>} /> 
+           <Route path="adminManageCategory" element={<AdminManageCategory/>} /> 
+        </Route> 
         </Route> 
 
         <Route  element={<PrivateRoutes role="admin"/>} >
