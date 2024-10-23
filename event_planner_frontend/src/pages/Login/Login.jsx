@@ -25,10 +25,16 @@ const Login = () => {
         try {
             const res = await axios.post('http://localhost:9000/api/v1/user/login', formData);
     
+    
             if (res && res.status === 200) {
                 localStorage.setItem('token', res.data.token);
                // alert(res.data.msg);
+               if(res.data.role=="client"){
                 navigate('/changepassword');
+            }
+            if(res.data.role=="admin"){
+                navigate('/adminDashboard');
+            }
             } else {
                 alert('Unexpected response from server.');
                 console.log('Server response:', res);
