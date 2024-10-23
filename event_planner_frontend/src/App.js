@@ -4,6 +4,10 @@ import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
 import ResetPassword from './pages/ForgotPassword/Resetpassword';
 import ChangePassword from './pages/ChangePassword/ChangePassword';
+import AdminAddCategory from './pages/Admin/AdminAddCategory';
+import PrivateRoutes from './PrivateRoutes';
+import AdminDashboard from './pages/AdminDashboard/adminDashboard';
+import AdminManageCategory from './pages/Admin/AdminManageCategory';
 
 function App() {
   return (
@@ -12,8 +16,16 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/changepassword" element={<ChangePassword/>} /> 
         <Route path="/" element={<Login/>} exact />
+
+        <Route  element={<PrivateRoutes role="client"/>} >
+           <Route path="/changepassword" element={<ChangePassword/>} /> 
+        </Route> 
+
+        <Route  element={<PrivateRoutes role="admin"/>} >
+            
+        </Route> 
+       
     </Routes>
   </Router>
   )
