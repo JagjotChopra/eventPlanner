@@ -37,17 +37,56 @@ async function addNewEventCategory(req, res) {
 }
 
 async function getAllEventCategory (req, res) {
-   
+    try {
+        const categories = await EventCategory.find();
+        data=categories.map((category)=>{
+        return {...category.toObject(),image:"http://localhost:9000/uploads/"+category.image}
+        })
+        console.log(data);
+        res.status(200).json(
+            {
+                success: true,
+                data
+              }
+        );
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
 async function updateEventCategory (req, res) {
-   
+    const { name, description } = req.body; // Destructure the name and description from the request body
+    const updateFields = { name, description }; // Prepare the update fields
+
+    // Check if there's an uploaded file for the image
+    if (req.file) {
+        // If an image is uploaded, add it to the update fields
+        updateFields.image = req.file.filename; // Assuming the file path is stored in the `path` field
+    }
+
+    try {
+        // Update the category with the specified fields
+        const updatedCategory = await EventCategory.findByIdAndUpdate(
+            req.params.id, 
+            updateFields, 
+            { new: true } // Return the updated document
+        );
+       const data= {...updatedCategory.toObject(),image:"http://localhost:9000/uploads/"+updatedCategory.image}
+        res.status(200).json({status:"success",data}); // Send the updated category as a response
+    } catch (error) {
+        res.status(500).json({status:"error", message: error.message }); // Handle errors
+    }
 }
 
 
 
 async function deleteEventCategory (req, res) {
-    
+    try {
+        await EventCategory.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Category deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
 module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload};

@@ -1,8 +1,9 @@
 let express=require('express');
 const cors = require('cors');
 const userRouter = require('./routes/userRoutes');
-
+const adminRouter = require('./routes/adminRoutes');
 const DBConnection = require('./dbConnection');
+const path = require('path');
 
 let server=express();
 
