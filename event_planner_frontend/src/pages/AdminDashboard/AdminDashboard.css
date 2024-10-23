@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+
+
+  .navbar {
+    width: 100%;
+    background-color: #5B3413;
+    padding: 0px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 10vh;
+    margin: 0px;
+    box-sizing: border-box;
+  }
+
+  .nav-heading {
+    color: white;
+    font-size: 24px;
+    font-family: "Cinzel Decorative", serif;
+} 
+
+  
+  .navbar-links {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar-link {
+    color: white;
+    text-decoration: none;
+    margin: 0 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .navbar-link:hover {
+    background-color: #575757;
+    border-radius: 5px;
+  }
+  
+  /* Dropdown Styles */
+  .navbar-dropdown {
+    position: relative;
+  }
+  
+  .dropdown-toggle {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+  
+  .dropdown-toggle:hover {
+    background-color: #575757;
+    border-radius: 5px;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    list-style-type: none;
+    padding: 10px 0;
+    margin: 0;
+    min-width: 180px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dropdown-menu li {
+    padding: 10px;
+  }
+  
+  .dropdown-menu li:hover {
+    background-color: #575757;
+  }
+  
+  .dropdown-menu li a {
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .admin-content {
+    width: 100%;
+    
+    background-color: #FAF9F6;
+  }
+  
