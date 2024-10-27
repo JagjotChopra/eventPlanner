@@ -7,30 +7,56 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const AdminManageCategory = () => {
-    const [data, setData] = useState([
-        {
-            _id: '1',
-            name: 'Music Festival',
-            description: 'A grand music festival with multiple artists.',
-            image: 'https://images.unsplash.com/photo-1519677100203-a0e668c92439'
-        },
-        {
-            _id: '2',
-            name: 'Tech Conference',
-            description: 'Conference showcasing the latest in technology.',
-            image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df'
-        },
-        {
-            _id: '3',
-            name: 'Food Expo',
-            description: 'An expo for food lovers to enjoy a variety of cuisines.',
-            image: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9'
-        }]);
-        
+    const [data, setData] = useState([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
+        fetchData();
     }, []);
+
+    const fetchData = async () => {
+
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get('http://localhost:9000/api/v1/admin/EventCategory', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            console.log(response);
+            if (response.status == "200") {
+                setData(response.data.data);
+            }
+        } catch (error) {
+            console.error('Error Fetching Event category Data:', error);
+            // Handle different response statuses
+            if (error.response) {
+                const { status } = error.response;
+                let message;
+
+                // Set messages based on response status
+                switch (status) {
+                    case 401:
+                        message = "Invalid token or no token provided.";
+                        break;
+                    case 403:
+                        message = "Access denied. You do not have permission to perform this action.";
+                        break;
+                    default:
+                        message = "An error occurred.";
+                        break;
+                }
+
+                alert("Need To Login Again");
+                localStorage.removeItem('token');
+                navigate('/login');
+
+            } else {
+                alert("Server is Down. Please Try Later");
+            }
+        }
+    };
 
     const handleView = (category) => {
         alert("View Category");
