@@ -81,7 +81,51 @@ const AdminManageCategory = () => {
     };
 
     const handleDelete = async (id) => {
-        alert("Delete Category");
+        // Show a confirmation box before deleting
+        const confirmDelete = window.confirm("Are you sure you want to delete this category?");
+        const token = localStorage.getItem('token');
+        // If the user confirms, proceed with deletion
+        if (confirmDelete) {
+            try {
+                const response = await axios.delete(`http://localhost:9000/api/v1/admin/EventCategory/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
+                console.log(response);
+                if (response.status == 200) {
+                    fetchData();
+                    alert("Event Category Item is Deleted Successfully");
+                }
+            }
+            catch (error) {
+                console.error('Error Fetching Event category Data:', error);
+                // Handle different response statuses
+                if (error.response) {
+                    const { status } = error.response;
+                    let message;
+                    switch (status) {
+                        case 401:
+                            message = "Invalid token or no token provided.";
+                            break;
+                        case 403:
+                            message = "Access denied. You do not have permission to perform this action.";
+                            break;
+                        default:
+                            message = "An error occurred.";
+                            break;
+                    }
+
+                    alert("Need To Login Again");
+                    localStorage.removeItem('token');
+                    navigate('/login');
+
+                } else {
+                    alert("Server is Down. Please Try Later");
+                }
+            }
+        };
+
     }
 
     const handleImageChange = (e) => {
