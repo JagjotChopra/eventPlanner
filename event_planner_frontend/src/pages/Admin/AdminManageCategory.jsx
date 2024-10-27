@@ -89,7 +89,58 @@ const AdminManageCategory = () => {
     };
 
     const handleSubmit = async (e) => {
-        alert("Updated Category");
+        const token = localStorage.getItem('token');
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        if (newImage) {
+            formData.append('image', newImage);
+        }
+        console.log(formData);
+
+        try {
+            const response = await axios.put(`http://localhost:9000/api/v1/admin/EventCategory/${selectedCategory._id}`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+
+            });
+            console.log(response);
+            if (response.status == 200) {
+                alert("Event Category is Updated Successfully")
+                setIsModalOpen(false);
+                fetchData();
+            }
+        }
+        catch (error) {
+            console.error('Error Fetching Event category Data:', error);
+            // Handle different response statuses
+            if (error.response) {
+                const { status } = error.response;
+                let message;
+
+                // Set messages based on response status
+                switch (status) {
+                    case 401:
+                        message = "Invalid token or no token provided.";
+                        break;
+                    case 403:
+                        message = "Access denied. You do not have permission to perform this action.";
+                        break;
+                    default:
+                        message = "An error occurred.";
+                        break;
+                }
+
+                alert("Need To Login Again"); // Show the message to the user
+                localStorage.removeItem('token');
+                navigate('/login');
+
+            } else {
+                alert("Server is Down. Please Try Later");
+            }
+        }
     };
 
     return (
