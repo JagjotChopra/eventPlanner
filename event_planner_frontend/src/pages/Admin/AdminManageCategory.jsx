@@ -8,6 +8,15 @@ import { useNavigate } from 'react-router-dom';
 
 const AdminManageCategory = () => {
     const [data, setData] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [image, setImage] = useState(null);
+    const [newImage, setNewImage] = useState(null);
+    const [error, setError] = useState({ status: false, message: '' });
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [viewCategory, setViewCategory] = useState(null);
 
     const navigate = useNavigate();
 
@@ -59,16 +68,29 @@ const AdminManageCategory = () => {
     };
 
     const handleView = (category) => {
-        alert("View Category");
+        setViewCategory(category);
+        setIsViewModalOpen(true); // Open the view modal
     };
 
     const handleEdit = (category) => {
-        alert("Edit Category");
+        setSelectedCategory(category);
+        setName(category.name);
+        setDescription(category.description);
+        setImage(category.image);
+        setIsModalOpen(true); // Open the modal
     };
 
     const handleDelete = async (id) => {
         alert("Delete Category");
     }
+
+    const handleImageChange = (e) => {
+        setNewImage(e.target.files[0]);
+    };
+
+    const handleSubmit = async (e) => {
+        alert("Updated Category");
+    };
 
     return (
         <div className="eventCategory-container">
@@ -88,6 +110,71 @@ const AdminManageCategory = () => {
                     </div>
                 ))}
             </div>
+
+            {isModalOpen && (
+                <div className="eventCategory-modal">
+                    <div className="eventCategory-modal-content">
+                        {/* Close Icon */}
+                        <button className="close-modal-btn" onClick={() => setIsModalOpen(false)}>
+                            &times;
+                        </button>
+
+                        <h3>Edit Category</h3>
+                        <form onSubmit={handleSubmit} className="reset-form" style={{ marginTop: '10px' }}>
+                            <input
+                                type="text"
+                                placeholder="Enter Category Name"
+                                className="reset-input-password"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                            <textarea
+                                placeholder="Enter the Category description"
+                                className="reset-input-password"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                style={{ marginTop: '20px' }}
+                                required
+                            ></textarea>
+
+                            <img src={image} className="eventCategory-image" style={{ height: '200px', objectFit: 'cover' }} />
+
+                            <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'space-between', width: '100%' }}>
+                                <label>Upload Category Image</label>
+                                <input type="file" onChange={handleImageChange} accept="image/*" />
+                            </div>
+
+                            <button type="submit" className="submit-btn" style={{ marginTop: '40px', marginBottom: '40px' }}>
+                                Update Category
+                            </button>
+                            {error.status && <p style={{ color: 'red' }}>{error.message}</p>}
+                        </form>
+                    </div>
+                </div>
+            )}
+
+
+            {isViewModalOpen && (
+                <div className="eventCategory-modal">
+                    <div className="eventCategory-modal-content">
+                        {/* Close Icon */}
+                        <button className="close-modal-btn" onClick={() => setIsViewModalOpen(false)}>
+                            &times;
+                        </button>
+
+                        <h3>View Category</h3>
+                        {viewCategory && (
+                            <div className="viewSpecificEvent">
+                                <img src={viewCategory.image} alt={viewCategory.name} style={{ width: '500px', height: '300px', objectFit: 'cover' }} className="eventCategory-image" />
+                                <p style={{ fontSize: "20px" }}> {viewCategory.name}</p>
+                                <p> {viewCategory.description}</p>
+                            </div>
+                        )}
+
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
