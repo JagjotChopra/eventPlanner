@@ -68,7 +68,7 @@ const AdminAddVenue = () => {
       return false;
     }
 
-    const sizePattern = /^[5] x [6]$/; // Check if size matches "5 x 6"
+    const sizePattern = /^\d+ x \d+$/;
     if (!sizePattern.test(formData.size)) {
       setError('Size must be in the format "5 x 6".');
       return false;
@@ -82,7 +82,7 @@ const AdminAddVenue = () => {
         return false;
     }
 
-    if (formData.max_capacity <= formData.min_capacity){
+    if (Number(formData.max_capacity) < Number(formData.min_capacity)){
       setError('Maximum capacity must be greater than minimum capacity.');
       return false;
     }
