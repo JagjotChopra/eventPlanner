@@ -89,4 +89,10 @@ async function deleteEventCategory (req, res) {
     }
 }
 
-module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload};
+
+const addEventVenue = async (req, res) => {
+ 
+  };
+  
+
+module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload,addEventVenue};
