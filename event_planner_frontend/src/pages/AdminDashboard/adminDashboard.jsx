@@ -3,44 +3,63 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css'; // Import CSS for styling
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
-const AdminDashboard = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Function to toggle dropdown visibility
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+const AdminDashboard = () => {
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [venueDropdownOpen, setVenueDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Functions to toggle each dropdown separately
+  const toggleCategoryDropdown = () => {
+    setCategoryDropdownOpen(!categoryDropdownOpen);
+    setVenueDropdownOpen(false); // Close the other dropdown
   };
-  const navigate=useNavigate();
+
+  const toggleVenueDropdown = () => {
+    setVenueDropdownOpen(!venueDropdownOpen);
+    setCategoryDropdownOpen(false); // Close the other dropdown
+  };
 
   const logout = () => {
-   // Ask for confirmation
-   const isConfirmed = window.confirm("Are you sure you want to logout?");
+    // Ask for confirmation
+    const isConfirmed = window.confirm("Are you sure you want to logout?");
     
-   // If the user confirms, proceed with logout
-   if (isConfirmed) {
-       // Remove token from local storage
-       localStorage.removeItem('token'); 
-       
-       navigate('/login')
-      // window.location.href = '/login'; // Update the path as needed
-   }
-};
+    // If the user confirms, proceed with logout
+    if (isConfirmed) {
+      // Remove token from local storage
+      localStorage.removeItem('token'); 
+      navigate('/login');
+    }
+  };
+
   return (
-    <div >
+    <div>
       <nav className="navbar">
-          <p className='nav-heading'>Refined Stack</p>
+        <p className='nav-heading'>Refined Stack</p>
         <ul className="navbar-links">
           <li><Link to="/adminDashboard" className="navbar-link">Dashboard</Link></li>
-          
-         {/* Dropdown Menu */}
-         <li className="navbar-dropdown" onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
+
+          {/* Event Category Dropdown Menu */}
+          <li className="navbar-dropdown" onMouseEnter={toggleCategoryDropdown} onMouseLeave={() => setCategoryDropdownOpen(false)}>
             <span className="navbar-link dropdown-toggle">
-              Event Category <IoMdArrowDropdownCircle  />
+              Event Category <IoMdArrowDropdownCircle />
             </span>
-            {dropdownOpen && (
+            {categoryDropdownOpen && (
               <ul className="dropdown-menu">
                 <li><Link to="adminAddCategory" className="navbar-link">Add Category</Link></li>
                 <li><Link to="adminManageCategory" className="navbar-link">Manage Event Category</Link></li>
+              </ul>
+            )}
+          </li>
+
+          {/* Event Venue Dropdown Menu */}
+          <li className="navbar-dropdown" onMouseEnter={toggleVenueDropdown} onMouseLeave={() => setVenueDropdownOpen(false)}>
+            <span className="navbar-link dropdown-toggle">
+              Event Venue <IoMdArrowDropdownCircle />
+            </span>
+            {venueDropdownOpen && (
+              <ul className="dropdown-menu">
+                <li><Link to="adminAddVenue" className="navbar-link">Add Venue</Link></li>
               </ul>
             )}
           </li>

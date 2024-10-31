@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const EventCategory = require('../model/eventCategoryModel');
-
+const Venue = require('../model/VenueModel');
 // Multer storage configuration for saving files
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -89,4 +89,32 @@ async function deleteEventCategory (req, res) {
     }
 }
 
-module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload};
+
+const addEventVenue = async (req, res) => {
+    try {
+        const { venue_name, size, max_capacity, min_capacity, hall_price, availability_status, address, sitting_arrangement } = req.body;
+    
+        // Create a new venue object
+        const venue = new Venue({
+          venue_name,
+          size,
+          max_capacity,
+          min_capacity,
+          venue_price: hall_price,
+          availability_status,
+          address: JSON.parse(address),
+          sitting_arrangement: JSON.parse(sitting_arrangement),
+          image_upload: req.files.map(file => file.filename), // Store paths of uploaded images
+        });
+    
+        // Save the venue to the database
+        await venue.save();
+        res.status(201).json({ message: 'Venue added successfully', venue });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error });
+      }
+  };
+  
+
+module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload,addEventVenue};
