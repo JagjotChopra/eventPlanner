@@ -9,6 +9,7 @@ import PrivateRoutes from './PrivateRoutes';
 import AdminDashboard from './pages/AdminDashboard/adminDashboard';
 import AdminManageCategory from './pages/Admin/AdminManageCategory';
 import AdminAddVenue from './pages/AdminVenue/AdminAddVenue';
+import AdminManageVenue from './pages/AdminVenue/AdminManageVenue';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
            <Route path="adminChangepassword" element={<ChangePassword/>} /> 
            <Route path="adminManageCategory" element={<AdminManageCategory/>} /> 
            <Route path="adminAddVenue" element={<AdminAddVenue/>} /> 
+           <Route path="adminManageVenue" element={<AdminManageVenue/>} /> 
         </Route> 
         </Route> 
        
