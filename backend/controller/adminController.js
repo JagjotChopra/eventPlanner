@@ -202,7 +202,7 @@ const addEventVenue = async (req, res) => {
       await venue.save();
       console.log("Venue updated in DB:", venue);
   
-      res.json({ message: "Venue updated successfully", venue });
+      res.status(201).json({ message: "Venue updated successfully", venue });
     } catch (error) {
       console.error("Error updating venue:", error);
       res.status(500).json({ message: "Error updating venue" });

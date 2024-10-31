@@ -75,6 +75,7 @@ const AdminManageVenue = () => {
 
     // Open the edit modal with the selected venue data
     const openEditModal = (venue) => {
+        setError('');
         setEditVenue(venue);
         setImagePreviews(venue.image_upload.map(img => `http://localhost:9000/uploads/${img}`)); // Preview images from database
         setEditModalIsOpen(true);
@@ -246,6 +247,55 @@ const AdminManageVenue = () => {
         if (!validateForm()) {
             return;
         }
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`http://localhost:9000/api/v1/admin/UpdateVenue/${editVenue._id}`,formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.status == "201") {
+                closeEditModal();
+                alert('Venue updated successfully');
+               
+                fetchVenues(); 
+              }
+            else {
+                setError("Failed to update the venue.");
+            }
+        } catch (error) {
+            console.error('Error adding category:', error.response);
+            // Handle different response statuses
+            if (error.response ) {
+              const { status } = error.response;
+              let message;
+      
+              // Set messages based on response status
+              switch (status) {
+                case 401:
+                  message = "Invalid token or no token provided.";
+                  break;
+                case 403:
+                  message = "Access denied. You do not have permission to perform this action.";
+                  break;
+                default:
+                  message = "An error occurred.";
+                  break;
+              }
+      
+              alert("Need To Login Again"); // Show the message to the user
+              localStorage.removeItem('token');
+              navigate('/login');
+           
+            }
+            
+           
+              setError('Server is Down. Please Try Later');
+          
+          }
+      
 
       
     };
