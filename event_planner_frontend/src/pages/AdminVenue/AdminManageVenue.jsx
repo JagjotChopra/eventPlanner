@@ -299,7 +299,9 @@ const AdminManageVenue = () => {
 
       
     };
-
+    const handleDelete = async (id) => {
+       
+    };
 
 
 
@@ -324,7 +326,7 @@ const AdminManageVenue = () => {
                 </thead>
                 <tbody>
                     {venues.map((venue) => (
-                        <tr key={venue.venue_name}>
+                        <tr key={venue._id}>
                             <td style={{ border: '1px solid #ccc', padding: '10px' }}>{venue.venue_name}</td>
                             <td style={{ border: '1px solid #ccc', padding: '10px' }}>{venue.address.street}, {venue.address.city}, {venue.address.postalcode},  {venue.address.province}, {venue.address.country}</td>
                             <td style={{ border: '1px solid #ccc', padding: '10px' }}>{venue.size}</td>
@@ -346,7 +348,7 @@ const AdminManageVenue = () => {
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '10px' }}>
                                 <button onClick={() => openEditModal(venue)} style={{ margin: '5px', padding: '5px', backgroundColor: '#FFC107', color: '#000', border: 'none', cursor: 'pointer' }}>Edit</button>
-                                <button style={{ margin: '5px', padding: '5px', backgroundColor: '#F44336', color: '#FFF', border: 'none', cursor: 'pointer' }}>Delete</button>
+                                <button onClick={() => handleDelete(venue._id)} style={{ margin: '5px', padding: '5px', backgroundColor: '#F44336', color: '#FFF', border: 'none', cursor: 'pointer' }}>Delete</button>
                             </td>
                         </tr>
                     ))}

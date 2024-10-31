@@ -13,4 +13,5 @@ adminRouter.get('/EventCategory',adminController.getAllEventCategory)
 adminRouter.post('/AddEventVenue', adminController.upload.array('images', 10), adminController.addEventVenue);
 adminRouter.get('/GetEventVenue', adminController.getEventVenue);
 adminRouter.put('/UpdateVenue/:id',adminController.updateUpload.array('newImages', 10),adminController.updateEventVenue)
+adminRouter.delete('/DeleteEventVenue/:id', adminController.deleteEventVenue);
 module.exports = adminRouter;

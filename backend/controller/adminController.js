@@ -232,4 +232,18 @@ const removeImages = async (venue, images) => {
       console.error("removeImages: Expected an array but received:", images);
     }
   };
-module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload,addEventVenue,getEventVenue,updateUpload,updateEventVenue};
+
+
+const deleteEventVenue = async(req,res)=>{
+    try {
+        const venueId = req.params.id;
+        const venue = await Venue.findByIdAndDelete(venueId);
+        if (!venue) {
+            return res.status(404).json({ message: "Venue not found" });
+        }
+        res.status(200).json({ message: "Venue deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+}
+module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload,addEventVenue,getEventVenue,updateUpload,updateEventVenue,deleteEventVenue};
