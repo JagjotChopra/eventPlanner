@@ -133,6 +133,23 @@ const AdminManageVenue = () => {
 
     const validateForm = () => {
         setError('');
+        if (
+            !editVenue?.venue_name ||
+            !editVenue?.address?.street ||
+            !editVenue?.address?.city ||
+            !editVenue?.address?.postalcode ||
+            !editVenue?.address?.province ||
+            !editVenue?.address?.postalcode ||
+            !editVenue?.address?.country ||
+            !editVenue?.size ||
+            !editVenue?.max_capacity ||
+            !editVenue?.min_capacity ||
+            !editVenue?.venue_price
+        ) {
+            alert('All Fields are Required');
+            return false; // Validation failed
+        }
+
         if (imagePreviews.length === 0) {
             setError('At least 1 image is required.');
             return false;
