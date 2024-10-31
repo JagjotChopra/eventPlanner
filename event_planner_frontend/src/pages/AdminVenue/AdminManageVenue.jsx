@@ -300,7 +300,48 @@ const AdminManageVenue = () => {
       
     };
     const handleDelete = async (id) => {
-       
+        const token = localStorage.getItem('token');
+           
+        try {
+            await axios.delete(`http://localhost:9000/api/v1/admin/DeleteEventVenue/${id}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            fetchVenues();
+        } catch (error) {
+            console.error('Error adding category:', error.response);
+            // Handle different response statuses
+            if (error.response ) {
+              const { status } = error.response;
+              let message;
+      
+              // Set messages based on response status
+              switch (status) {
+                case 401:
+                  message = "Invalid token or no token provided.";
+                  break;
+                case 403:
+                  message = "Access denied. You do not have permission to perform this action.";
+                  break;
+                default:
+                  message = "An error occurred.";
+                  break;
+              }
+      
+              alert("Need To Login Again"); // Show the message to the user
+              localStorage.removeItem('token');
+              navigate('/login');
+           
+            }
+            else{
+
+                alert('Server is Down. Please Try Later');
+            }
+            
+           
+         
+        }
     };
 
 
