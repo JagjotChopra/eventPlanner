@@ -116,5 +116,12 @@ const addEventVenue = async (req, res) => {
       }
   };
   
-
-module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload,addEventVenue};
+  const getEventVenue = async (req, res) => {
+    try {
+        const venues = await Venue.find(); // Fetching all venues from the database
+        res.status(200).json(venues);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+  }
+module.exports={addNewEventCategory,deleteEventCategory,updateEventCategory,getAllEventCategory,upload,addEventVenue,getEventVenue};
