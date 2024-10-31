@@ -301,7 +301,8 @@ const AdminManageVenue = () => {
     };
     const handleDelete = async (id) => {
         const token = localStorage.getItem('token');
-           
+        const confirmDelete = window.confirm("Are you sure you want to delete this category?");
+       if(confirmDelete){
         try {
             await axios.delete(`http://localhost:9000/api/v1/admin/DeleteEventVenue/${id}`,{
                 headers: {
@@ -342,6 +343,7 @@ const AdminManageVenue = () => {
            
          
         }
+    }
     };
 
 
