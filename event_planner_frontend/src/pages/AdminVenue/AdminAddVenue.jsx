@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 const AdminAddVenue = () => {
   const [formData, setFormData] = useState({
     venue_name: '',
@@ -12,6 +12,7 @@ const AdminAddVenue = () => {
     hall_price: '',
     availability_status: 'avaiable',
   });
+  const navigate = useNavigate(); 
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [error, setError] = useState('');
@@ -106,13 +107,70 @@ const AdminAddVenue = () => {
       return; // Stop submission if validation fails
     }
     console.log(formData);
-   
+    const data = new FormData();
+
+    data.append('venue_name', formData.venue_name);
+    data.append('size', formData.size);
+    data.append('max_capacity', formData.max_capacity);
+    data.append('min_capacity', formData.min_capacity);
+    data.append('hall_price', formData.hall_price);
+    data.append('availability_status', formData.availability_status);
+    data.append('address', JSON.stringify(formData.address));
+    data.append('sitting_arrangement', JSON.stringify(formData.sitting_arrangement));
+
+    images.forEach(file => {
+      data.append('images', file);
+    });
+    const token = localStorage.getItem('token');
+    try {
+      const response=await axios.post('http://localhost:9000/api/v1/admin/AddEventVenue', data, {
+        headers: { 'Content-Type': 'multipart/form-data',
+             'Authorization': `Bearer ${token}`
+         }
+      });
+      if (response.status == "201") {
+        alert('Venue added successfully');
+        window.location.reload();
+      }
+
+      
+    } catch (error) {
+      console.error('Error adding category:', error.response);
+      // Handle different response statuses
+      if (error.response ) {
+        const { status } = error.response;
+        let message;
+
+        // Set messages based on response status
+        switch (status) {
+          case 401:
+            message = "Invalid token or no token provided.";
+            break;
+          case 403:
+            message = "Access denied. You do not have permission to perform this action.";
+            break;
+          default:
+            message = "An error occurred.";
+            break;
+        }
+
+        alert("Need To Login Again"); // Show the message to the user
+        localStorage.removeItem('token');
+        navigate('/login');
+     
+      }
+      
+     
+        setError('Server is Down. Please Try Later');
+    
+    }
+
   };
 
   return (
    <div style={{padding:'25px 0px'}}> 
    
- <form onSubmit={handleSubmit} style={{ maxWidth: '800px', margin: '0px auto', background:'white', padding: '20px 50px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
+ <form  style={{ maxWidth: '800px', margin: '0px auto', background:'white', padding: '20px 50px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
       
       <h3 style={{textAlign:'center'}}>Add Event Venue</h3>
       <label style={{ display: 'block', marginBottom: '10px' }}>
@@ -205,7 +263,7 @@ const AdminAddVenue = () => {
       </div>
 
       {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
-      <button type="submit"  className='submit-btn' style={{ marginTop: '40px', marginBottom: '40px' }}>
+      <button type="button" onClick={handleSubmit}  className='submit-btn' style={{ marginTop: '40px', marginBottom: '40px' }}>
         Add Venue
       </button>
     </form> 

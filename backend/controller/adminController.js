@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const EventCategory = require('../model/eventCategoryModel');
-
+const Venue = require('../model/VenueModel');
 // Multer storage configuration for saving files
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
