@@ -86,7 +86,7 @@ const navStyle = {
 };
 const logoContainerStyle = { display: 'flex', alignItems: 'center' };
 const logoImageStyle = { width: '75px', height: '75px', marginRight: '10px' };
-const logoTextStyle = { fontSize: '24px', fontWeight: 'bold', color: '#fff', letterSpacing: '2px' };
+const logoTextStyle = { fontSize: '24px', fontWeight: 'bold', color: '#fff', letterSpacing: '2px', textDecoration:'none' };
 const linksContainerStyle = { display: 'flex', alignItems: 'center', gap: '30px' };
 const linksStyle = { display: 'flex', gap: '20px', marginRight: '80px',  } ;
 const linkStyle = {
