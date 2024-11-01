@@ -1,0 +1,319 @@
+/* Main section styling */
+.about-section {
+    min-height: 100vh;
+    padding: 4px 40px;
+    background: linear-gradient(
+      135deg, 
+      rgba(255,255,255,1) 0%,
+      rgba(245,245,245,1) 50%,
+      rgba(235,235,235,1) 100%
+    );
+    perspective: 1000px;
+   
+  }
+  
+  .about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: containerFadeIn 1s ease-out forwards;
+    margin-bottom: 30px;
+  }
+  
+  /* Title styling */
+  .about-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    animation: titleSlideDown 1s ease-out forwards;
+  }
+  
+  .about-title::before {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #a2783a, #d4af37);
+    transform: translateX(-50%);
+    animation: lineExpand 1s ease-out 0.5s forwards;
+  }
+  
+  /* Paragraph styling */
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    perspective: 1000px;
+    
+  }
+  
+  .about-paragraph {
+    position: relative;
+    padding: 30px 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform-origin: center;
+    opacity: 0;
+    transform: translateY(30px) rotateX(-10deg);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .about-paragraph.visible {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+  
+  .about-paragraph:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 1);
+  }
+  
+  .about-paragraph::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 15px;
+    background: linear-gradient(45deg, #a2783a, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .about-paragraph:hover::before {
+    opacity: 0.05;
+  }
+  
+  /* Text styling */
+  .about-paragraph {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #34495e;
+    font-weight: 400;
+  }
+  
+  /* Animations */
+  @keyframes containerFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes titleSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes lineExpand {
+    from { width: 0; }
+    to { width: 100px; }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 1024px) {
+    .about-section {
+      padding: 80px 30px;
+    }
+    
+    .about-title {
+      font-size: 2.8rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .about-section {
+      padding: 60px 20px;
+    }
+    
+    .about-title {
+      font-size: 2.2rem;
+      margin-bottom: 40px;
+    }
+    
+    .about-paragraph {
+      padding: 25px;
+      font-size: 1.1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .about-title {
+      font-size: 1.8rem;
+    }
+    
+    .about-paragraph {
+      padding: 20px;
+      font-size: 1rem;
+    }
+  }
+  
+  /* Optional: Add smooth scrolling to the entire page */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Optional: Add text selection styling */
+  ::selection {
+    background: rgba(162, 120, 58, 0.2);
+    color: #2c3e50;
+  }
+
+  /* FoodDrinkSection.css */
+.food-section {
+    padding: 80px 20px;
+    background: linear-gradient(to bottom, #ffffff, #f8f8f8);
+}
+
+.food-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.food-title {
+    font-size: 2.5rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+    font-weight: 600;
+}
+
+.food-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #a2783a;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    padding: 20px;
+}
+
+.food-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.food-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.food-image-container {
+    height: 250px;
+    overflow: hidden;
+}
+
+.food-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.food-card:hover .food-image {
+    transform: scale(1.1);
+}
+
+.food-content {
+    padding: 25px;
+}
+
+.food-subtitle {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.food-description {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .food-section {
+        padding: 60px 15px;
+    }
+    
+    .food-title {
+        font-size: 2rem;
+    }
+    
+    .food-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .food-title {
+        font-size: 1.8rem;
+    }
+    
+    .food-image-container {
+        height: 200px;
+    }
+}
+.food-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.view-more-btn {
+    padding: 12px 30px;
+    background-color: #a2783a;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(162, 120, 58, 0.2);
+    margin-left: 20px;
+}
+
+.view-more-btn:hover {
+    background-color: #8b6732;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(162, 120, 58, 0.3);
+}
+
+.view-more-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .view-more-btn {
+        padding: 10px 25px;
+        font-size: 1rem;
+    }
+}
