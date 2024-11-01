@@ -68,7 +68,7 @@ const AdminAddVenue = () => {
       return false;
     }
 
-    const sizePattern = /^\d+ x \d+$/;
+    const sizePattern = /^\s*\d+\s*x\s*\d+\s*$/;
     if (!sizePattern.test(formData.size)) {
       setError('Size must be in the format "5 x 6".');
       return false;

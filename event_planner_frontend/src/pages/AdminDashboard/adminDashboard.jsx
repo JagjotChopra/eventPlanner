@@ -60,6 +60,7 @@ const AdminDashboard = () => {
             {venueDropdownOpen && (
               <ul className="dropdown-menu">
                 <li><Link to="adminAddVenue" className="navbar-link">Add Venue</Link></li>
+                <li><Link to="adminManageVenue" className="navbar-link">Manage Event Venue</Link></li>
               </ul>
             )}
           </li>
