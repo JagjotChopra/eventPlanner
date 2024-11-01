@@ -190,16 +190,27 @@ const addEventVenue = async (req, res) => {
   
       // Update other venue details if any
       Object.keys(req.body).forEach(key => {
+        // if (key !== 'existingImages' && key !== 'imagesToRemove') {
+        //   venue[key] = req.body[key];
+        // }
         if (key !== 'existingImages' && key !== 'imagesToRemove') {
-          venue[key] = req.body[key];
-        }
+          // Check if the key is 'sitting_arrangement' and needs to be converted to an array
+          if (key === 'sitting_arrangement' && typeof req.body[key] === 'string') {
+              // Split the string by commas to convert it into an array
+              venue[key] = req.body[key].split(',');
+          } else {
+              // For other keys, assign the value directly
+              venue[key] = req.body[key];
+          }
+      }
       });
   
+     //  console.log("Siiting ",req.body.sitting_arrangement); 
       // Log the venue before saving
       console.log("Venue before saving:", venue);
   
       // Save the updated venue to the database
-      await venue.save();
+     await venue.save();
       console.log("Venue updated in DB:", venue);
   
       res.status(201).json({ message: "Venue updated successfully", venue });

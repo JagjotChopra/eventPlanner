@@ -110,6 +110,7 @@ const AdminManageVenue = () => {
                     : sittingArr.filter((arr) => arr !== value),
             };
         });
+
     };
 
     // Handle file change for new image uploads
@@ -424,7 +425,7 @@ const AdminManageVenue = () => {
 
                     <label style={{ display: 'block', marginBottom: '10px' }}>Sitting Arrangement:
                         <div style={{ display: 'flex', gap: '10px', marginTop: '5px' }}>
-                            {['circle', 'rows', 'U-Shape'].map((arrangement) => (
+                            {['circle', 'rows', 'ushaped'].map((arrangement) => (
                                 <label key={arrangement}>
                                     <input
                                         type="checkbox"
