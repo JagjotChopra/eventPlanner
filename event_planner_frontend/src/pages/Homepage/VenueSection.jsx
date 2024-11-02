@@ -19,7 +19,7 @@ const VenueSection = () => {
     }, []);
 
     return (
-        <section style={{
+        <section className = 'venue' style={{
             padding: '8px 20px',
             background: 'linear-gradient(to bottom, #ffffff, #f8f9fa)',
         }}>

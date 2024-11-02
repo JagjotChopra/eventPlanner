@@ -22,7 +22,7 @@ const FoodDrinkSection = () => {
     ];
 
     return (
-        <section className="food-section">
+        <section className="food">
             <div className="food-container">
                 <h2 className="food-title">Food & Drink Options</h2>
                 <div className="food-grid">
@@ -42,7 +42,9 @@ const FoodDrinkSection = () => {
                     }
                     
                 </div>
-                <a href='/foodmenu'><button className="view-more-btn" >View More</button></a>
+                <a href='/foodmenu' style={{ display: 'flex', justifyContent: 'center', textDecoration:'none'}}>
+                    <button className="view-more-btn">View More</button>
+                </a>
             </div>
         </section>
     );

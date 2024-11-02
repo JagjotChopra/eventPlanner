@@ -29,7 +29,7 @@ const HeaderHome = () => {
             {/* Logo Section */}
             <div style={logoContainerStyle}>
                 <img src={logo} alt="logo" style={logoImageStyle} />
-                <a href="/homepage"><div style={logoTextStyle}>Refined Stack Co</div></a>
+                <span onClick={() => window.location.href = '/homepage'} style={logoTextStyle}>Refined Stack Co</span>
             </div>
 
             {/* Navigation Links */}
@@ -86,7 +86,13 @@ const navStyle = {
 };
 const logoContainerStyle = { display: 'flex', alignItems: 'center' };
 const logoImageStyle = { width: '75px', height: '75px', marginRight: '10px' };
-const logoTextStyle = { fontSize: '24px', fontWeight: 'bold', color: '#fff', letterSpacing: '2px', textDecoration:'none' };
+const logoTextStyle = { 
+    fontSize: '24px', 
+    fontWeight: 'bold', 
+    color: '#fff', 
+    letterSpacing: '2px' ,
+    cursor: 'pointer' 
+};
 const linksContainerStyle = { display: 'flex', alignItems: 'center', gap: '30px' };
 const linksStyle = { display: 'flex', gap: '20px', marginRight: '80px',  } ;
 const linkStyle = {
@@ -95,8 +101,8 @@ const linkStyle = {
     fontWeight: '500',
     color: '#fff',
     letterSpacing: '1px',
-    transition: 'color 0.3s ease',
-    
+    transition: 'color 0.3s ease', 
+    cursor: 'pointer'
 };
 // const dropdownContainerStyle = { position: 'relative' };
 // const dropdownToggleStyle = { color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' };

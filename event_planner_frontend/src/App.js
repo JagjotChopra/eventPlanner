@@ -31,7 +31,19 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/" element={<Login/>} exact />
+        <Route path="/" element={
+            <>
+            <HeaderHome />
+            <HeroSectionHome />
+            <HomeDescription />
+            <EventCategory />
+            <VenueSection />
+            <FoodDrinkSection />
+            <AboutHome />
+            <FooterHome />
+            </>
+          }
+          />
 
         <Route  element={<PrivateRoutes role="client"/>} >
            <Route path="/changepassword" element={<ChangePassword/>} /> 
