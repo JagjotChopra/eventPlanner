@@ -1,6 +1,16 @@
 import './FoodMenu.css';
+import corporateMenu from '../../assets/Corporate Event Food Menu.pdf';
+import socialMenu from '../../assets/Party Event Food Menu.pdf';
 
 const Contact = () => {
+  const downloadPDF = (pdfFile, fileName) => {
+    const link = document.createElement('a');
+    link.href = pdfFile;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <>
      <section style={{
@@ -57,7 +67,8 @@ const Contact = () => {
       cursor: 'pointer',
       transition: 'all 0.3s ease',
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-    }} >
+    }} 
+    onClick={() => downloadPDF(corporateMenu, 'Corporate Event Food Menu.pdf')}>
       Download our Corporate Menu
     </button>
     
@@ -72,7 +83,8 @@ const Contact = () => {
       cursor: 'pointer',
       transition: 'all 0.3s ease',
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-    }} >
+    }} 
+    onClick={() => downloadPDF(socialMenu, 'Party Event Food Menu.pdf')}>
       Download our Social Menu
     </button>
   </div>
