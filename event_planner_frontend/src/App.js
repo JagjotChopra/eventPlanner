@@ -8,6 +8,14 @@ import AdminAddCategory from './pages/Admin/AdminAddCategory';
 import PrivateRoutes from './PrivateRoutes';
 import AdminDashboard from './pages/AdminDashboard/adminDashboard';
 import AdminManageCategory from './pages/Admin/AdminManageCategory';
+
+import Navbar from './pages/FoodMenu/FoodMenu';
+import HeroSection from './pages/FoodMenu/HeroSection';
+import Services from "./pages/FoodMenu/Services";
+import Testimonials from "./pages/FoodMenu/About";
+import Contact from "./pages/FoodMenu/Contact";
+import Footer from "./pages/FoodMenu/Footer";
+
 import AdminAddVenue from './pages/AdminVenue/AdminAddVenue';
 import AdminManageVenue from './pages/AdminVenue/AdminManageVenue';
 
@@ -23,6 +31,7 @@ import FoodDrinkSection from './pages/Homepage/FoodDrinkSection';
 import FooterHome from './pages/Homepage/Footer';
 import HomeDescription from './pages/Homepage/HomeDescription';
 import AboutHome from './pages/Homepage/AboutHome';
+
 
 function App() {
   return (
@@ -48,7 +57,19 @@ function App() {
         <Route  element={<PrivateRoutes role="client"/>} >
            <Route path="/changepassword" element={<ChangePassword/>} /> 
         </Route> 
-
+        <Route
+          path="/foodmenu"
+          element={
+            <>
+              <Navbar />
+              <HeroSection />
+              <Contact />
+              <Services />
+              <Testimonials />
+              <Footer />
+            </>
+          }
+        /> 
         <Route  element={<PrivateRoutes role="admin"/>} >
            <Route path="/adminDashboard" element={<AdminDashboard/>} >
            <Route index element={<AdminAddCategory />} />
