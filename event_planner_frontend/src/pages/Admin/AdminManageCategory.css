@@ -1,0 +1,216 @@
+.eventCategory-container {
+  
+    width: 80%;;
+    margin: auto;
+    margin-top: px;
+ }
+  
+  .eventCategory-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-family: "Cinzel Decorative", serif;
+    font-weight: bold;
+    color: #333;
+
+    padding:5vh 0px;
+  }
+  
+  .eventCategory-table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .eventCategory-header-row {
+    background-color: #4CAF50; /* Green */
+    color: white;
+  }
+  
+  .eventCategory-header {
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .eventCategory-row:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .eventCategory-cell {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .viewSpecificEvent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .eventCategory-image {
+    width: 350px;
+    height: auto;
+  }
+  
+  .eventCategory-button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  
+  
+  .eventCategory-button:hover {
+    opacity: 0.8;
+  }
+  
+  .eventCategory-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .eventCategory-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .eventCategory-modal-content h3 {
+    margin-top: 0;
+  }
+  
+  .reset-input-password {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .submit-btn {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .eventCategory-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .eventCategory-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    width: 500px;
+  }
+  
+  .close-modal-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .close-modal-btn:hover {
+    color: red;
+  }
+  
+
+
+  .eventCategory-box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .eventCategory-box {
+    width: 350px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding-bottom: 20px;
+  }
+  
+  .eventCategory-box-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    border-bottom: 1px solid lightgray;
+  }
+  
+  .eventCategory-box-title {
+    margin-top: 10px;
+    font-size: 1.2rem;
+  }
+  
+  .eventCategory-box-description {
+    margin-top: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .eventCategory-box-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .eventCategory-button {
+    margin: 5px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .eventCategory-edit-button {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .eventCategory-delete-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .eventCategory-view-button {
+    background-color: #008cba;
+    color: white;
+  }
