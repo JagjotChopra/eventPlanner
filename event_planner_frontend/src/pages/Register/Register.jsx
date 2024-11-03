@@ -25,6 +25,9 @@ const Register = () => {
     const validateFields = () => {
         const newErrors = {};
 
+        if(!isNaN(name)){
+            newErrors.name = 'Name must be Alphabetics';
+        }
         // Password validation (min 6 characters)
         if (!password || password.length < 6) {
             newErrors.password = 'Password must be at least 6 characters long.';
@@ -101,7 +104,7 @@ const Register = () => {
                             className='form-input'
                             required
                         />
-
+                        {errors.name && <p className="error-text">{errors.name}</p>}
                         <input
                             type="email"
                             name="email"

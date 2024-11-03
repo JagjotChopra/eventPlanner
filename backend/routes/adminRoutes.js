@@ -1,0 +1,17 @@
+const express = require('express');
+const adminRouter = express.Router();
+let adminController=require('../controller/adminController');
+const checkAdminRole = require('../middleware/authAdmin'); // Adjust the path as necessary
+
+adminRouter.use(checkAdminRole);
+// Admin Managing Event categories
+adminRouter.get('/EventCategory',adminController.getAllEventCategory)
+.post('/EventCategory',adminController.upload.single('image'),adminController.addNewEventCategory)
+.put('/EventCategory/:id',adminController.upload.single('image'), adminController.updateEventCategory)
+.delete('/EventCategory/:id', adminController.deleteEventCategory);
+
+adminRouter.post('/AddEventVenue', adminController.upload.array('images', 10), adminController.addEventVenue);
+adminRouter.get('/GetEventVenue', adminController.getEventVenue);
+adminRouter.put('/UpdateVenue/:id',adminController.updateUpload.array('newImages', 10),adminController.updateEventVenue)
+adminRouter.delete('/DeleteEventVenue/:id', adminController.deleteEventVenue);
+module.exports = adminRouter;
