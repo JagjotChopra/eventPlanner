@@ -30,7 +30,7 @@ const Login = () => {
                 localStorage.setItem('token', res.data.token);
                // alert(res.data.msg);
                if(res.data.role=="client"){
-                navigate('/changepassword');
+                navigate('/homepage');
             }
             if(res.data.role=="admin"){
                 navigate('/adminDashboard');

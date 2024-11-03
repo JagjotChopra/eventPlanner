@@ -4,6 +4,9 @@ const userRouter = require('./routes/userRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const DBConnection = require('./dbConnection');
 const path = require('path');
+const eventCategoryRoutes = require('./routes/eventCategoryRoutes');
+const userDashboardRouter = require('./routes/userDashboardRoutes');
+const venueRoutes = require('./routes/venueRoutes');
 
 let server=express();
 
@@ -19,7 +22,9 @@ server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 server.use('/api/v1/user',userRouter);
 server.use('/api/v1/admin',adminRouter);
-
+server.use('/api/v1/eventcategories', eventCategoryRoutes);
+server.use('/api/v1/user',userDashboardRouter);
+server.use('/api/v1/eventvenue', venueRoutes);
 //server things
 const PORT=9000;
 server.listen(PORT,()=>{
