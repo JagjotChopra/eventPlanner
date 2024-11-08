@@ -23,6 +23,8 @@ const HeaderHome = () => {
          const isConfirmed = window.confirm("Are you sure you want to logout?");
          if (isConfirmed) {
             localStorage.removeItem('token');
+            localStorage.removeItem('lastNavigationPath');
+            localStorage.removeItem('selectedVenue');
             navigate('/login');
           //  window.location.href = '/login';
         }

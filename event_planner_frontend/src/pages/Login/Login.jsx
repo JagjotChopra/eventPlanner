@@ -29,8 +29,13 @@ const Login = () => {
             if (res && res.status === 200) {
                 localStorage.setItem('token', res.data.token);
                // alert(res.data.msg);
+               let lastNavigationPath=localStorage.getItem('lastNavigationPath');
                if(res.data.role=="client"){
-                navigate('/homepage');
+                if(lastNavigationPath=="/eventvenue"){
+                    navigate('/booking');
+                }else{
+                    navigate('/homepage');
+                }
             }
             if(res.data.role=="admin"){
                 navigate('/adminDashboard');

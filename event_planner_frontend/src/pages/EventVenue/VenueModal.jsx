@@ -1,6 +1,7 @@
 // components/VenueModal.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserAuth } from '../../userAuth';
 
 const VenueModal = ({ venue, onClose }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -19,8 +20,22 @@ const VenueModal = ({ venue, onClose }) => {
     const navigate = useNavigate();
     // Function to handle booking
     const handleBooking = () => {
-        localStorage.setItem('selectedVenue', JSON.stringify(venue));
-        navigate('/booking');
+        // checking user is login or not.
+        if(UserAuth()=="admin"){
+            alert("You Login with Admin Account. So you can't book a venue")
+        }
+        else if(UserAuth()=="client"){
+            localStorage.setItem('selectedVenue', JSON.stringify(venue));
+            navigate('/booking');
+        }
+        else{
+            alert("Need To Login in your Account");
+            localStorage.setItem('selectedVenue', JSON.stringify(venue));
+            localStorage.setItem('lastNavigationPath','/eventvenue');
+            navigate('/login');
+        }
+
+       
     };
 
     return (
