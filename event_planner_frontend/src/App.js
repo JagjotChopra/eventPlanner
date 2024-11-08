@@ -31,6 +31,7 @@ import FoodDrinkSection from './pages/Homepage/FoodDrinkSection';
 import FooterHome from './pages/Homepage/Footer';
 import HomeDescription from './pages/Homepage/HomeDescription';
 import AboutHome from './pages/Homepage/AboutHome';
+import VenuePage from './pages/EventVenue/VenuePage';
 
 
 function App() {
@@ -61,7 +62,7 @@ function App() {
           path="/foodmenu"
           element={
             <>
-              <Navbar />
+              <HeaderHome />
               <HeroSection />
               <Contact />
               <Services />
@@ -70,6 +71,18 @@ function App() {
             </>
           }
         /> 
+
+<Route
+          path="/eventvenue"
+          element={
+            <>
+              <HeaderHome />
+              <VenuePage />
+              <FooterHome />
+            </>
+          }
+        /> 
+
         <Route  element={<PrivateRoutes role="admin"/>} >
            <Route path="/adminDashboard" element={<AdminDashboard/>} >
            <Route index element={<AdminAddCategory />} />

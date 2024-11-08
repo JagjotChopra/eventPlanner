@@ -14,7 +14,7 @@ const HeroSectionHome = () => {
                 <p style={paragraphStyle}>From weddings to corporate gatherings, we’ve got you covered.</p>
                 
                 <Link
-                    to="/booking"
+                    to="/eventvenue"
                     style={buttonStyle}
                     onMouseEnter={(e) => e.target.style.backgroundColor = '#8f6930'}
                     onMouseLeave={(e) => e.target.style.backgroundColor = '#a2783a'}
