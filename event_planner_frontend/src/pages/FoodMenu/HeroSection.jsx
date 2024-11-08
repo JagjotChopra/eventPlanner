@@ -63,7 +63,7 @@ const HeroSection = () => {
           State-of-the-art-catering.
         </p>
         
-        <Link to="contact" spy={true} smooth={true} duration={500} style={{
+        {/* <Link to="contact" spy={true} smooth={true} duration={500} style={{
             padding: '15px 30px',
             backgroundColor: '#a2783a',
             color: '#fff',
@@ -76,7 +76,7 @@ const HeroSection = () => {
           }} onMouseEnter={(e) => e.target.style.backgroundColor = '#8f6930'}
              onMouseLeave={(e) => e.target.style.backgroundColor = '#a2783a'}>
           BOOK NOW
-        </Link>
+        </Link> */}
         
       </div>
       

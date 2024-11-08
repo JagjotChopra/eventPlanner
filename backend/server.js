@@ -25,6 +25,7 @@ server.use('/api/v1/admin',adminRouter);
 server.use('/api/v1/eventcategories', eventCategoryRoutes);
 server.use('/api/v1/user',userDashboardRouter);
 server.use('/api/v1/eventvenue', venueRoutes);
+
 //server things
 const PORT=9000;
 server.listen(PORT,()=>{

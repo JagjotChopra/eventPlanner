@@ -1,15 +1,18 @@
 // components/Header.js
 import React, { useState } from 'react';
 import { Link } from "react-scroll";
+import { NavLink, useNavigate} from 'react-router-dom'
 import { GiHamburgerMenu } from "react-icons/gi";
-// import { IoMdArrowDropdownCircle } from "react-icons/io";
-// import { FaArrowRightToBracket } from "react-icons/fa6";
+ import { IoMdArrowDropdownCircle } from "react-icons/io";
+ import { FaArrowRightToBracket } from "react-icons/fa6";
 import logo from '../../assets/R-removebg-preview.png'; // Adjust path as needed
+import { UserAuth } from '../../userAuth';
 
 const HeaderHome = () => {
+    
     // const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
-
+    const navigate=useNavigate();
     // Function to toggle dropdown visibility
     // const toggleDropdown = () => {
     //     setDropdownOpen(!dropdownOpen);
@@ -17,11 +20,12 @@ const HeaderHome = () => {
 
     // Function to handle logout
     const logout = () => {
-        // const isConfirmed = window.confirm("Are you sure you want to logout?");
-        // if (isConfirmed) {
+         const isConfirmed = window.confirm("Are you sure you want to logout?");
+         if (isConfirmed) {
             localStorage.removeItem('token');
-            window.location.href = '/login';
-        // }
+            navigate('/login');
+          //  window.location.href = '/login';
+        }
     };
 
     return (
@@ -29,22 +33,32 @@ const HeaderHome = () => {
             {/* Logo Section */}
             <div style={logoContainerStyle}>
                 <img src={logo} alt="logo" style={logoImageStyle} />
-                <span onClick={() => window.location.href = '/homepage'} style={logoTextStyle}>Refined Stack Co</span>
+                <span onClick={() => navigate('/homepage')} style={logoTextStyle}>Refined Stack Co</span>
             </div>
 
             {/* Navigation Links */}
             <div className={showMenu ? "navLinks showMenu" : "navLinks"} style={linksContainerStyle}>
                 <div className="links" style={linksStyle}  >
-                    <Link to="herohome" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
-             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Home</Link>
-                    <Link to="events" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
-             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Events</Link>
-                    <Link to="venue" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
-             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Venues</Link>
-                    <Link to="food" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
-             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Food</Link>
-                    <Link onClick={logout} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
-             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Login/Signup</Link>
+                    {
+                        (UserAuth()=="admin")?<NavLink to="/adminDashboard" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+                        onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Dashboard</NavLink>
+                   :<NavLink to="/homepage" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Home</NavLink>
+                    }
+                    <NavLink to={'/eventvenue'} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Venues</NavLink>
+                    <NavLink to="/foodmenu" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Food</NavLink>
+             {
+                (UserAuth()=="admin" ||UserAuth()=="client")?<NavLink style={logoutStyle}   onClick={logout}>
+                Logout <FaArrowRightToBracket style={{fontSize:'14px'}}/>
+            </NavLink>:<NavLink to={'/login'} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+                onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Login/Signup</NavLink>
+             }
+                    {/* <NavLink onClick={logout} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+             onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Login/Signup</NavLink>
+              */}
+
                     {/* User Dropdown Section */}
                     {/* <div style={dropdownContainerStyle} onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
                         <span style={dropdownToggleStyle}>
@@ -81,6 +95,7 @@ const navStyle = {
     width: '100%',
     top: '0',
     zIndex: '1000',
+    borderColor:'none',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     fontFamily: "Cinzel Decorative",
 };
@@ -94,16 +109,30 @@ const logoTextStyle = {
     cursor: 'pointer' 
 };
 const linksContainerStyle = { display: 'flex', alignItems: 'center', gap: '30px' };
-const linksStyle = { display: 'flex', gap: '20px', marginRight: '80px',  } ;
+const linksStyle = { display: 'flex', gap: '20px',alignItems: 'center', marginRight: '80px',  } ;
 const linkStyle = {
     textDecoration: 'none',
-    fontSize: '18px',
+    fontSize: '14px',
     fontWeight: '500',
     color: '#fff',
     letterSpacing: '1px',
     transition: 'color 0.3s ease', 
     cursor: 'pointer'
 };
+
+const logoutStyle = {
+    textDecoration: 'none',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    color: 'black',
+    letterSpacing: '1px',
+    transition: 'color 0.3s ease', 
+    cursor: 'pointer',
+    background:'white',
+    padding:'10px 15px',
+    borderRadius:'25px'
+};
+
 // const dropdownContainerStyle = { position: 'relative' };
 // const dropdownToggleStyle = { color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' };
 // const dropdownMenuStyle = {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './login.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import bg from '../../assets/pexels-expect-best-79873-1243337.jpg';
 import logo from '../../assets/R-removebg-preview.png';
 
@@ -56,7 +56,9 @@ const Login = () => {
 
     return (
         <div className="container">
-            <div className="box2">
+           <div className="box2">
+           <NavLink to={'/homepage'} style={{position:'absolute',cursor:'pointer',top:'10px',left:'20px',color:'black',opacity:'0.8',textDecoration:'none'}} >Home</NavLink>
+           
                 <form onSubmit={handleSubmit} className="register-form">
                     <h3>Log In</h3>
                     <hr className="divider" />

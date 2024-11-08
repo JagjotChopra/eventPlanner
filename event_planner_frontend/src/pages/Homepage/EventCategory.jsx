@@ -33,8 +33,7 @@ const EventCategory = () => {
                                 alt={category.name} 
                                 style={imageStyle} 
                             />
-                            <h3>{category.name}</h3>
-                            <p>{category.description}</p>
+                            <h3 style={{fontSize:'28px'}}>{category.name}</h3>
                         </div>
                     ))
                 ) : (
@@ -48,7 +47,7 @@ const EventCategory = () => {
 // Styles
 const categorySectionStyle = { padding: '50px 20px', textAlign: 'center', backgroundColor: '#f4f4f4' };
 const categoryContainerStyle = { display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' };
-const categoryCardStyle = { width: '300px', textAlign: 'center' };
+const categoryCardStyle = { width: '300px', textAlign: 'center', margin:'10px',padding:'10px' };
 const imageStyle = { width: '100%', height: '200px', borderRadius: '8px' };
 
 export default EventCategory;

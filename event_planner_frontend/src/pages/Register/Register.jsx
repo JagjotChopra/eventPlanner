@@ -5,6 +5,7 @@ import logo from '../../assets/R-removebg-preview.png';
 import check from '../../assets/check.png';
 import cross from '../../assets/remove.png';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -91,6 +92,7 @@ const Register = () => {
                     <p className="sub-heading">Your One-Stop Solution for Hassle-Free Event Planning and Venue Booking.</p>
                 </div>
                 <div className="box2">
+                <NavLink to={'/homepage'} style={{position:'absolute',cursor:'pointer',top:'10px',right:'20px',color:'black',opacity:'0.8',textDecoration:'none'}} >Home</NavLink>
                     <form className="register-form" onSubmit={handleSubmit}>
                         <h3>Create An Account</h3>
                         <hr className="divider" />
@@ -146,7 +148,7 @@ const Register = () => {
                             required
                         />
                         <button type="submit" className="submit-btn">Register</button><br />
-                        <p className="signup-text">Already have an account? <a href="/login" style={{fontWeight:'bold'}}>Login</a></p>
+                        <p className="signup-text">Already have an account? <NavLink to="/login" style={{fontWeight:'bold'}}>Login</NavLink></p>
                     </form>
                 </div>
             </div>
