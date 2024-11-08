@@ -76,7 +76,9 @@ function App() {
           path="/eventvenue"
           element={
             <>
-             
+              <HeaderHome />
+              <VenuePage />
+              <FooterHome />
             </>
           }
         /> 
