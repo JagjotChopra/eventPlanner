@@ -3,6 +3,8 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css'; // Import CSS for styling
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
+import logo from '../../assets/R-removebg-preview.png';
+import Footer from '../Homepage/Footer';
 
 const AdminDashboard = () => {
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
@@ -35,7 +37,10 @@ const AdminDashboard = () => {
   return (
     <div>
       <nav className="navbar">
-        <p className='nav-heading'>Refined Stack</p>
+      <div style={logoContainerStyle}>
+                <img src={logo} alt="logo" style={logoImageStyle} />
+                <h3 onClick={() => navigate('/homepage')} style={logoTextStyle}>Refined Stack Co</h3>
+            </div>
         <ul className="navbar-links">
           <li><Link to="/adminDashboard" className="navbar-link">Dashboard</Link></li>
 
@@ -72,8 +77,17 @@ const AdminDashboard = () => {
       <div className="admin-content">
         <Outlet />
       </div>
+      <Footer/>
     </div>
   );
 };
-
+const logoContainerStyle = { display: 'flex', alignItems: 'center' };
+const logoImageStyle = { width: '75px', height: '75px', marginRight: '10px' };
+const logoTextStyle = { 
+    fontSize: '24px', 
+    fontWeight: 'bold', 
+    color: '#fff', 
+    letterSpacing: '2px' ,
+    cursor: 'pointer' 
+};
 export default AdminDashboard;
