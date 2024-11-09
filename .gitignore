@@ -1,2 +1,3 @@
 # Node modules (both frontend and backend)
 node_modules/
+.env

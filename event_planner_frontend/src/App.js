@@ -33,6 +33,8 @@ import HomeDescription from './pages/Homepage/HomeDescription';
 import AboutHome from './pages/Homepage/AboutHome';
 import VenuePage from './pages/EventVenue/VenuePage';
 
+// Booking Page
+import BookingForm from './pages/Booking/BookingForm';
 
 function App() {
   return (
@@ -116,7 +118,16 @@ function App() {
             </>
           }
         /> 
-        
+        <Route
+          path="/booking"
+          element={
+            <>
+              <HeaderHome />
+              <BookingForm />
+              <FooterHome />
+            </>
+          }
+        /> 
        
     </Routes>
   </Router>
