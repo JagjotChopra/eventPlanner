@@ -80,57 +80,8 @@ const VenueStep = ({ formData, setFormData, onChange, availableVenues, onNext, o
     );
 };
 const styles = {
-    // stepContainer: {
-    //     padding: '20px',
-    // },
-   
-    // buttonGroup: {
-    //     display: 'flex',
-    //     justifyContent: 'space-between',
-    //     marginTop: '20px',
-    //     gap: '20px'
-    // },
-    // prevButton: {
-    //     flex: '1',
-    //     padding: '15px',
-    //     backgroundColor: '#fff',
-    //     color: '#a2783a',
-    //     border: '2px solid #a2783a',
-    //     borderRadius: '5px',
-    //     fontSize: '16px',
-    //     fontWeight: '500',
-    //     cursor: 'pointer',
-    //     transition: 'all 0.3s ease',
-    //     '&:hover': {
-    //         backgroundColor: '#f9f9f9'
-    //     }
-    // },
-    // nextButton: {
-    //     flex: '1',
-    //     padding: '15px',
-    //     backgroundColor: '#a2783a',
-    //     color: '#fff',
-    //     border: 'none',
-    //     borderRadius: '5px',
-    //     fontSize: '16px',
-    //     fontWeight: '500',
-    //     cursor: 'pointer',
-    //     transition: 'background-color 0.3s ease',
-    //     '&:hover': {
-    //         backgroundColor: '#8f6930'
-    //     },
-    //     '&:disabled': {
-    //         backgroundColor: '#cccccc',
-    //         cursor: 'not-allowed'
-    //     }
-    // },
     stepContainer: {
         padding: '30px',
-        // maxWidth: '600px',
-        // margin: '0 auto',
-        // backgroundColor: '#fff',
-        // borderRadius: '10px',
-        // boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
     },
     heading: {
         fontSize: '24px',
