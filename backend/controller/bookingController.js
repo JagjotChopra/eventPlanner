@@ -1,195 +1,101 @@
-// components/BookingForm.jsx
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import DateTimeStep from './DateTimeStep';
-import VenueStep from './VenueStep';
-import GuestsStep from './GuestsStep';
-import FoodStep from './FoodStep';
-import ConfirmationStep from './ConfirmationStep';
-import { useNavigate } from 'react-router-dom';
-const BookingForm = () => {
-    // Form Data State
-    
-    const navigate = useNavigate();
-   const [formData, setFormData] = useState({
-        categoryId:'',
-        date: '',
-        timeSlot: [],
-        venueId: '',
-        guestNumber: '',
-        sittingArrangement: '',
-        includeFoodService: false,
-        menuChoice: '',
-        venueCost:0,
-        foodCost:0,
-        totalCost: 0
-    });
-    // Steps Control
-    const [currentStep, setCurrentStep] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
-    console.log("Current Step",currentStep);
-    // Venue Data
-    const [availableVenues, setAvailableVenues] = useState([]);
-    const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
-    
+// controllers/bookingController.js
+const Event = require('../model/EventModel');
+ const Booking = require('../model/BookingModel');
+const Venue = require('../model/VenueModel');
+const Category = require('../model/eventCategoryModel');
+const bookingController = {
     // Check venue availability
-    const checkVenueAvailability = async (date) => {
+    checkAvailability: async (req, res) => {
         try {
-            const response = await axios.post('/api/check-availability', {
-                date: date
+            const { venue_id, date } = req.body;
+    
+            // Convert date string to a Date object
+            const bookingDate = new Date(date);
+    
+            // Get booked events for the specified venue and date (excluding cancelled bookings)
+            const bookedEvents = await Event.find({
+                venue_id: venue_id,
+                date: bookingDate,
             });
-            setAvailableVenues(response.data.venues);
+    
+            // Define available time slots
+            const timeSlots = ["9-4", "5-11"];
+            
+          // Flatten booked events' time slots and find available slots
+const bookedSlots = bookedEvents.flatMap(event => event.time_slot);
+const availableSlots = timeSlots.filter(slot => !bookedSlots.includes(slot));
+            console.log(availableSlots);
+            // Check the availability status based on booked slots
+            if (availableSlots.length === 0) {
+                res.json({ message: "The venue is fully booked on this date." });
+            } else {
+                res.json({ availableSlots });
+            }
         } catch (error) {
-            setError('Failed to check venue availability');
+            res.status(500).json({ message: error.message });
         }
-    };
-    // Check timeslot availability
-    const checkTimeSlotAvailability = async (date, venueId) => {
+    },
+    
+    
+   
+    // Create new booking
+    createBooking: async (req, res) => {
+         console.log(req.body);
+        //  console.log(req.user._id)
         try {
-            const response = await axios.post('/api/check-timeslots', {
+            const {
+                categoryId,
+                venueId,
+                date,
+                timeSlot,
+                guestNumber,
+                sittingArrangement,
+                includeFoodService,
+                menuChoice,
+                venueCost,
+                foodCost,
+                totalCost
+            } = req.body;
+        const userId=req.user._id;
+        const user_name = req.user.name;
+        const email_id = req.user.email;
+            // Create event first
+            const event = new Event({
+                category_id: categoryId,
+                venue_id: venueId,
                 date: date,
-                venueId: venueId
+                time_slot:timeSlot,
+                guest_number: guestNumber,
+                sitting_arrangement: sittingArrangement,
+                menu_choice: includeFoodService ? menuChoice : null
             });
-            setAvailableTimeSlots(response.data.timeSlots);
+            let ev=   await event.save();
+         
+            // Create booking
+            const booking = new Booking({
+                user_id: req.user._id,
+                event_id: ev._id,
+                venue_cost:venueCost,
+                food_cost:foodCost,
+                total_cost: totalCost
+            });
+          let book=  await booking.save();
+          const venue = await Venue.findOne({ _id: venueId });
+          const eventCategory = await Category.findOne({ _id: categoryId });
+            res.status(201).json({
+                message: 'Booking created successfully',
+                booking:book,
+                event:ev,
+                name: user_name,
+                email: email_id,
+                venue: venue,
+                category: eventCategory,
+            });
         } catch (error) {
-            setError('Failed to check timeslot availability');
+            console.log(error);
+            res.status(500).json({ message: error.message });
         }
-    };
-    // Handle form data changes
-    const handleChange = (field, value) => {
-        setFormData(prev => ({
-            ...prev,
-            [field]: value
-        }));
-        // Trigger availability checks
-        if (field === 'date') {
-            checkVenueAvailability(value);
-        }
-        if (field === 'venueId') {
-            checkTimeSlotAvailability(formData.date, value);
-            const venue = availableVenues.find(v => v._id === value);
-          //  setSelectedVenue(venue);
-        }
-    };
-    // Handle form submission
-    const handleSubmit = async () => {
-        console.log("final Form Data",formData);
-       // setIsLoading(true);
-       localStorage.setItem("formData",JSON.stringify(formData));
-       navigate('/payment');
-       // setIsLoading(false);
-    };
-    // Navigate between steps
-    const nextStep = () => {
-        console.log("Im clicked",currentStep)
-        setCurrentStep(prev => prev + 1);
-    };
-    const prevStep = () => {
-        setCurrentStep(prev => prev - 1);
-    };
-    // Navigate between steps
-    const ChangeVenue = () => {       
-        navigate('/eventvenue');
-    };
-    return (
-        <div style={styles.container}>
-            <div style={styles.formContainer}>
-                <h3 style={styles.title}>Event Booking</h3>
-                
-                {/* Progress Bar */}
-                <div style={styles.progressBar}>
-                    {[1, 2, 3, 4].map((step) => (
-                        <div
-                            key={step}
-                            style={{
-                                ...styles.progressStep,
-                                backgroundColor: step <= currentStep ? '#a2783a' : '#ddd'
-                            }}
-                        >
-                            {step}
-                        </div>
-                    ))}
-                </div>
-              
-                {currentStep === 1 && (
-                    <VenueStep
-                        formData={formData}
-                        setFormData={setFormData}
-                        onChange={handleChange}
-                        availableVenues={availableVenues}
-                        onNext={nextStep}
-                        onPrev={ChangeVenue}
-                    />
-                )}
-                {currentStep === 2 && (
-                    <GuestsStep
-                        formData={formData}
-                        onChange={handleChange}
-                        onNext={nextStep}
-                        onPrev={prevStep}
-                    />
-                )}
-                {currentStep === 3 && (
-                    <FoodStep
-                        formData={formData}
-                        onChange={handleChange}
-                        onNext={nextStep}
-                        onPrev={prevStep}
-                    />
-                )}
-                {currentStep === 4 && (
-                    <ConfirmationStep
-                        formData={formData}
-                        onSubmit={handleSubmit}
-                        setFormData={setFormData}
-                        onPrev={prevStep}
-                        isLoading={isLoading}
-                    />
-                )}
-                {error && <div style={styles.error}>{error}</div>}
-            </div>
-        </div>
-    );
+    },
+    
 };
-const styles = {
-    container: {
-        padding: '40px 20px',
-        maxWidth: '800px',
-        margin: '0 auto',
-    },
-    formContainer: {
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        padding: '30px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    },
-    title: {
-        textAlign: 'center',
-        color: '#333',
-        marginBottom: '30px',
-    },
-    progressBar: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginBottom: '40px',
-        position: 'relative',
-        padding: '0 20px',
-    },
-    progressStep: {
-        width: '30px',
-        height: '30px',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#fff',
-        zIndex: 2,
-    },
-    error: {
-        color: '#ff0000',
-        textAlign: 'center',
-        marginTop: '10px',
-    }
-};
-export default BookingForm;
+module.exports = bookingController;
