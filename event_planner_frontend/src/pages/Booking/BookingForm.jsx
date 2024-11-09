@@ -74,12 +74,25 @@ const BookingForm = () => {
     };
     // Handle form submission
     const handleSubmit = async () => {
-        console.log("final Form Data",formData);
-       // setIsLoading(true);
-       localStorage.setItem("formData",JSON.stringify(formData));
-       navigate('/payment');
-       // setIsLoading(false);
-    };
+        try {
+            // setIsLoading(true);
+            console.log("Submitting form data:", formData);
+            
+            // Validate formData before proceeding
+            if (!formData) {
+                throw new Error("Form data is missing");
+            }
+            
+            // Store in localStorage
+            localStorage.setItem("formData", JSON.stringify(formData));
+            
+            // Navigate to payment page
+            navigate('/payment');
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            // Handle error (e.g., show error message to user)
+        }
+    }
     // Navigate between steps
     const nextStep = () => {
         console.log("Im clicked",currentStep)
