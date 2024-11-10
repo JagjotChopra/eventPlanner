@@ -1,0 +1,212 @@
+import React, { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useNavigate } from 'react-router-dom';
+import 'jspdf-autotable';
+
+const stripePromise = loadStripe('STRIPE_PUBLIC_KEY');
+
+const PaymentsPage = () => {
+    return (
+        <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5', padding: '48px 16px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+            <div style={{ maxWidth: '500px', width: '100%' }}>
+                <Elements stripe={stripePromise}>
+                    <CheckoutForm />
+                </Elements>
+            </div>
+        </div>
+    );
+};
+
+const CheckoutForm = () => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const navigate = useNavigate();
+    const formData = JSON.parse(localStorage.getItem("formData")) || {};
+    const [loading, setLoading] = useState(false);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const totalAmount = formData.totalCost || 0;
+    const [bookingData, setBookingData] = useState(null); // Store booking data for receipt
+    const [paymentData, setPaymentData] = useState(null); // Store payment data
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (!stripe || !elements) return;
+
+        setLoading(true);
+        try {
+            const paymentResponse = await fetch('http://localhost:9000/api/v1/payments/create-payment-intent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ totalAmount: totalAmount * 100 }),
+            });
+            const { clientSecret } = await paymentResponse.json();
+
+            const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: elements.getElement(CardElement),
+                    billing_details: { name: 'User Name' },
+                },
+            });
+
+            if (error) {
+                console.error('Payment error:', error);
+                setLoading(false);
+            } else if (paymentIntent.status === 'succeeded') {
+                try {
+                    alert("Payment Successful Logic");
+                } catch (error) {
+                    alert("Error creating booking");
+                }
+            }
+        } catch (error) {
+            console.error('Error processing payment:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const cardStyle = {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#424770',
+                '::placeholder': { color: '#aab7c4' },
+                padding: '16px',
+            },
+            invalid: { color: '#9e2146' },
+        },
+    };
+
+    return (
+        <div style={{ backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', padding: '24px' }}>
+            {paymentSuccess ? (
+                <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                    <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#a2783a', marginBottom: '8px' }}>Payment Successful</h2>
+                    <p style={{ color: '#666', fontSize: '14px', marginBottom: '16px' }}>Thank you for your payment!</p>
+                    <button
+                        onClick={() => {
+                            console.log("Download Recepit");
+                            localStorage.removeItem("formData");
+                        }}
+                        style={{
+                            backgroundColor: '#a2783a',
+                            color: 'white',
+                            padding: '12px 24px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            fontSize: '14px',
+                            fontWeight: '500',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.2s',
+                        }}
+                    >
+                        Download Receipt
+                    </button>
+                </div>
+            ) : (
+                <div style={{
+                    backgroundColor: 'white',
+                    borderRadius: '10px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                    padding: '24px'
+                }}>
+                    <div style={{
+                        textAlign: 'center',
+                        marginBottom: '24px'
+                    }}>
+                        <h2 style={{
+                            fontSize: '24px',
+                            fontWeight: '600',
+                            color: '#a2783a',
+                            marginBottom: '8px'
+                        }}>Complete Your Payment</h2>
+                        <p style={{
+                            color: '#666',
+                            fontSize: '14px'
+                        }}>Secure payment processing powered by Stripe</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '24px'
+                    }}>
+                        <div style={{
+                            backgroundColor: '#f8f9fa',
+                            padding: '20px',
+                            borderRadius: '8px'
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginBottom: '16px'
+                            }}>
+                                <span style={{
+                                    fontSize: '14px',
+                                    fontWeight: '500',
+                                    color: '#666'
+                                }}>Total Amount</span>
+                                <span style={{
+                                    fontSize: '20px',
+                                    fontWeight: '600',
+                                    color: '#333'
+                                }}>${totalAmount}</span>
+                            </div>
+
+                            <div style={{
+                                height: '1px',
+                                backgroundColor: '#e0e0e0',
+                                margin: '16px 0'
+                            }} />
+
+                            <div>
+                                <label style={{
+                                    display: 'block',
+                                    fontSize: '14px',
+                                    fontWeight: '500',
+                                    color: '#666',
+                                    marginBottom: '8px'
+                                }}>
+                                    Card Details
+                                </label>
+                                <div style={{
+                                    backgroundColor: 'white',
+                                    padding: '16px',
+                                    borderRadius: '8px',
+                                    border: '1px solid #e0e0e0'
+                                }}>
+                                    <CardElement options={cardStyle} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={!stripe || loading}
+                            style={{
+                                backgroundColor: loading ? '#94a3b8' : '#a2783a',
+                                color: 'white',
+                                padding: '16px',
+                                borderRadius: '8px',
+                                border: 'none',
+                                fontSize: '16px',
+                                fontWeight: '500',
+                                cursor: loading ? 'not-allowed' : 'pointer',
+                                transition: 'background-color 0.2s',
+                                ':hover': {
+                                    backgroundColor: loading ? '#94a3b8' : '#a2783a'
+                                }
+                            }}
+                        >
+                            {loading ? 'Processing...' : `Pay $${totalAmount}`}
+                        </button>
+                    </form>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default PaymentsPage;
