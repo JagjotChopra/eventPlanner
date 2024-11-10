@@ -54,7 +54,16 @@ const CheckoutForm = () => {
                 setLoading(false);
             } else if (paymentIntent.status === 'succeeded') {
                 try {
-                    alert("Payment Successful Logic");
+                    const token = localStorage.getItem('token');
+                    const bookingResponse = await axios.post(
+                        'http://localhost:9000/api/v1/booking/create-booking',
+                        formData,
+                        { headers: { authorization: `Bearer ${token}` } }
+                    );
+                    console.log('Booking successful:', bookingResponse.data);
+                    setPaymentSuccess(true);
+                    setPaymentData(paymentIntent);
+                    setBookingData(bookingResponse.data); // Set booking data for the receipt
                 } catch (error) {
                     alert("Error creating booking");
                 }
