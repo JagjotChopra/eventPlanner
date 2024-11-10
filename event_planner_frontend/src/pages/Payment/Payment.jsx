@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 const stripePromise = loadStripe('pk_test_51OKFJrK06xPy6xcd28sE98ibkqridwPfqMMNDQYAaFJmwyT9ppiSXWbTdAOAHSQeO5z614izaVUIaMpdr8FBlLot002h7v1yJu');
@@ -75,6 +77,73 @@ const CheckoutForm = () => {
         }
     };
 
+    const downloadReceipt = () => {
+        if (!bookingData || !paymentData) return; // Ensure data is available
+
+        const doc = new jsPDF();
+
+        // Header
+        doc.setFontSize(24);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(30, 30, 100);
+        doc.text("Refined Stack Co: Event Booking Receipt", 14, 20);
+
+        // Payment Details Section
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100);
+        doc.text(`Transaction ID: ${paymentData.id}`, 14, 35);
+        doc.text(`Amount Paid: $${bookingData.booking.total_cost}`, 14, 42);
+        doc.text(`Payment Date: ${new Date(paymentData.created * 1000).toLocaleString()}`, 14, 49);
+
+        if (paymentData.payment_method_details && paymentData.payment_method_details.card) {
+            doc.text(`Card Last 4 Digits: ${paymentData.payment_method_details.card.last4}`, 14, 56);
+        }
+
+        // Customer and Booking Details
+        doc.setFontSize(16);
+        doc.setTextColor(50, 50, 180);
+        doc.text("Booking Details", 14, 70);
+
+        const bookingDetails = [
+            ["Customer Name", bookingData.name],
+            ["Email", bookingData.email],
+            ["Event Category", bookingData.category.name],
+            ["Venue", bookingData.venue.venue_name],
+            ["Venue Address", `${bookingData.venue.address.street}, ${bookingData.venue.address.city}, ${bookingData.venue.address.province} ${bookingData.venue.address.postalcode}, ${bookingData.venue.address.country}`],
+            ["Event Date", new Date(bookingData.event.date).toLocaleDateString()],
+            ["Time Slot", bookingData.event.time_slot.join(", ")],
+            ["Guest Number", bookingData.event.guest_number.toString()],
+            ["Sitting Arrangement", bookingData.event.sitting_arrangement],
+            ["Menu Choice", bookingData.menuChoice || "N/A"],
+            ["Venue Cost (Incl Decoration)", `$${bookingData.booking.venue_cost}`],
+            ["Food Cost", `$${bookingData.booking.food_cost || "0.00"}`],
+            ["Total Cost", `$${bookingData.booking.total_cost}`],
+        ];
+
+        // Table for detailed booking information
+        doc.autoTable({
+            head: [["Field", "Details"]],
+            body: bookingDetails,
+            startY: 80,
+            theme: "grid",
+            headStyles: {
+                fillColor: [30, 30, 100],
+                textColor: [255, 255, 255],
+                fontStyle: "bold",
+            },
+            bodyStyles: { cellPadding: 4, fontSize: 10 },
+            styles: { lineWidth: 0.1, lineColor: [100, 100, 100] },
+        });
+
+        // Footer
+        doc.setFontSize(10);
+        doc.setTextColor(120);
+        doc.text("Thank you for choosing our event services! For questions, contact support@events.com", 14, doc.lastAutoTable.finalY + 20);
+
+        doc.save("payment-receipt.pdf");
+    };
+
     const cardStyle = {
         style: {
             base: {
@@ -95,7 +164,7 @@ const CheckoutForm = () => {
                     <p style={{ color: '#666', fontSize: '14px', marginBottom: '16px' }}>Thank you for your payment!</p>
                     <button
                         onClick={() => {
-                            console.log("Download Recepit");
+                            downloadReceipt();
                             localStorage.removeItem("formData");
                         }}
                         style={{
