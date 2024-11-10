@@ -4,7 +4,7 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { useNavigate } from 'react-router-dom';
 import 'jspdf-autotable';
 
-const stripePromise = loadStripe('STRIPE_PUBLIC_KEY');
+const stripePromise = loadStripe('pk_test_51OKFJrK06xPy6xcd28sE98ibkqridwPfqMMNDQYAaFJmwyT9ppiSXWbTdAOAHSQeO5z614izaVUIaMpdr8FBlLot002h7v1yJu');
 
 const PaymentsPage = () => {
     return (

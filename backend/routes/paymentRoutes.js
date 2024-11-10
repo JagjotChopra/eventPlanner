@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const stripe = require('stripe')('STRIPE_SECRET_KEY');
+require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 router.post('/create-payment-intent', async (req, res) => {
     const { totalAmount } = req.body;
