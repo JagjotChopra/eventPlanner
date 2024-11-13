@@ -16,8 +16,16 @@ adminRouter.get('/EventCategory',cacheMiddleware(keyGenerator),adminController.g
 .delete('/EventCategory/:id',cacheMiddleware(keyGeneratorForCat), adminController.deleteEventCategory);
 
 
+adminRouter.get('/all-bookings', adminController.getAllBookings);
+adminRouter.put('/update-status/:id', adminController.updateBookingStatus);
+adminRouter.put('/update-datetime/:id', adminController.updateBookingDateTime);
+adminRouter.post('/check-availability', adminController.checkAvailability);
+
+
+
 adminRouter.post('/AddEventVenue',cacheMiddleware(keyGeneratorForVenue), adminController.upload.array('images', 10), adminController.addEventVenue);
 adminRouter.get('/GetEventVenue',cacheMiddleware(keyGenerator), adminController.getEventVenue);
 adminRouter.put('/UpdateVenue/:id',cacheMiddleware(keyGeneratorForVenue),adminController.updateUpload.array('newImages', 10),adminController.updateEventVenue)
 adminRouter.delete('/DeleteEventVenue/:id',cacheMiddleware(keyGeneratorForVenue), adminController.deleteEventVenue);
+
 module.exports = adminRouter;
