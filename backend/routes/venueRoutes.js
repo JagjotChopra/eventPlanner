@@ -3,11 +3,14 @@ const express = require('express');
 const { getAllVenues } = require('../controller/venueController');
 const Venue = require('../model/VenueModel');
 const router = express.Router();
+const cacheMiddleware = require('../middleware/cacheMiddleware');
 
 // Define the route to get all venues
-router.get('/venues', getAllVenues);
 
-router.get('/eventvenues', async (req, res) => {
+const keyGenerator = (req) => `myEndpoint:${req.originalUrl}`;
+router.get('/venues',cacheMiddleware(keyGenerator), getAllVenues);
+
+router.get('/eventvenues',cacheMiddleware(keyGenerator), async (req, res) => {
     try {
         const BASE_URL = 'http://localhost:9000/uploads/';
         const venues = await Venue.find();
@@ -23,7 +26,7 @@ router.get('/eventvenues', async (req, res) => {
     }
 });
 
-router.get('/eventvenues/cities', async (req, res) => {
+router.get('/eventvenues/cities',cacheMiddleware(keyGenerator), async (req, res) => {
     try {
         const cities = await Venue.distinct('address.city');
         res.json(cities);
