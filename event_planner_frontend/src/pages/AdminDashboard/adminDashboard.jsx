@@ -69,7 +69,7 @@ const AdminDashboard = () => {
               </ul>
             )}
           </li>
-
+          <li><Link to="adminBooking" className="navbar-link">Event Booking</Link></li>
           <li><Link to="adminChangePassword" className="navbar-link">Change Password</Link></li>
           <li style={{color:'black',marginLeft:"20px",background:"white",padding:"10px 15px",fontSize:"16px",fontWeight:"bolder",cursor:'pointer',borderRadius:"20px"}} onClick={logout}>Logout <FaArrowRightToBracket /></li>
         </ul>
