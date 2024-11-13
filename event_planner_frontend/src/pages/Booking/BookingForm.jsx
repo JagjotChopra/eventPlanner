@@ -7,9 +7,11 @@ import GuestsStep from './GuestsStep';
 import FoodStep from './FoodStep';
 import ConfirmationStep from './ConfirmationStep';
 import { useNavigate } from 'react-router-dom';
+import { UserAuth } from '../../userAuth';
 const BookingForm = () => {
     // Form Data State
     
+
     const navigate = useNavigate();
    const [formData, setFormData] = useState({
         categoryId:'',
@@ -24,6 +26,30 @@ const BookingForm = () => {
         foodCost:0,
         totalCost: 0
     });
+    console.log("formee",formData);
+    // useEffect(()=>{
+    //     localStorage.setItem('formData',JSON.stringify(formData));
+    // },[formData.date])
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            console.log('hhelo');
+            navigate('/');
+        }
+        if(localStorage.getItem('step')){
+            setCurrentStep(Number(localStorage.getItem('step')))
+        }
+        
+        if(!localStorage.getItem('selectedVenue')){
+            navigate('/eventvenue');
+        }
+        if(localStorage.getItem('formData')){
+            setFormData(JSON.parse(localStorage.getItem('formData')));
+        }
+
+    }, []);
+
+    
+
     // Steps Control
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +77,7 @@ const BookingForm = () => {
                 date: date,
                 venueId: venueId
             });
-            setAvailableTimeSlots(response.data.timeSlots);
+         //   setAvailableTimeSlots(response.data.timeSlots);
         } catch (error) {
             setError('Failed to check timeslot availability');
         }
@@ -97,9 +123,11 @@ const BookingForm = () => {
     const nextStep = () => {
         console.log("Im clicked",currentStep)
         setCurrentStep(prev => prev + 1);
+        localStorage.setItem('step',currentStep+1)
     };
     const prevStep = () => {
         setCurrentStep(prev => prev - 1);
+        localStorage.setItem('step',currentStep-1)
     };
     // Navigate between steps
     const ChangeVenue = () => {       
