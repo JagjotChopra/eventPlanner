@@ -98,6 +98,11 @@ const VenueSection = () => {
                     </div>
                 ))}
             </div>
+            <div>
+                <a href='/eventvenue' style={{ display: 'flex', justifyContent: 'center', textDecoration:'none'}}>
+                    <button className="view-more-btn">View More</button>
+                </a>
+                </div>
         </section>
     );
 };

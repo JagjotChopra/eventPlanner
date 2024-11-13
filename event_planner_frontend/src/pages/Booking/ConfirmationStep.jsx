@@ -3,6 +3,23 @@ const ConfirmationStep = ({ formData,setFormData, onSubmit, onPrev, isLoading })
     
     const [totalCost,setTotalCost]=useState(0);
     const selectedVenue=JSON.parse(localStorage.getItem("selectedVenue"));
+   
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        try {
+            // Create a Date object and increment the day by 1
+            const date = new Date(dateString);
+            date.setDate(date.getDate() + 1);
+    
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        } catch (error) {
+            return 'Invalid Date';
+        }
+    };
     const calculateTotal = () => {
         let venueCost = selectedVenue.venue_price;
         let foodCost = 0; // Default food cost to 0
@@ -10,6 +27,10 @@ const ConfirmationStep = ({ formData,setFormData, onSubmit, onPrev, isLoading })
         // If includeFoodService is true, calculate the food cost
         if (formData.includeFoodService) {
             foodCost = formData.guestNumber * 20; // Assuming $20 per person for food
+        }
+        if (formData.timeSlot.length > 1) {
+            venueCost = venueCost * 2;
+            foodCost = foodCost * 2;
         }
     
         // Calculate the total cost including venue and (if applicable) food cost
@@ -39,11 +60,11 @@ const ConfirmationStep = ({ formData,setFormData, onSubmit, onPrev, isLoading })
                     <h4 style={styles.sectionTitle}>Date & Time</h4>
                     <div style={styles.summaryItem}>
                         <span style={styles.label}>Date:</span>
-                        <span style={styles.value}>{new Date(formData.date).toLocaleDateString()}</span>
+                        <span style={styles.value}>{formatDate(formData.date)}</span>
                     </div>
                     <div style={styles.summaryItem}>
                         <span style={styles.label}>Time Slot:</span>
-                        <span style={styles.value}>{formData.timeSlot}</span>
+                        <span style={styles.value}>{formData.timeSlot.join(", ")}</span>
                     </div>
                 </div>
                 {/* Venue Details Section */}
@@ -88,12 +109,12 @@ const ConfirmationStep = ({ formData,setFormData, onSubmit, onPrev, isLoading })
                 <div style={styles.costSection}>
                     <div style={styles.summaryItem}>
                         <span style={styles.label}>Venue Cost: <span style={{color:'grey',fontSize:'10px'}}>(Incl. Decoration cost)</span></span>
-                        <span style={styles.value}>${selectedVenue.venue_price}</span>
+                        <span style={styles.value}>${selectedVenue.venue_price} x {formData.timeSlot.length} </span>
                     </div>
                     {formData.includeFoodService && (
                         <div style={styles.summaryItem}>
                             <span style={styles.label}>Food Service Cost:</span>
-                            <span style={styles.value}>${formData.guestNumber * 20}</span>
+                            <span style={styles.value}>${formData.guestNumber * 20} x {formData.timeSlot.length}</span>
                         </div>
                     )}
                     <div style={styles.totalCost}>

@@ -36,6 +36,8 @@ import VenuePage from './pages/EventVenue/VenuePage';
 // Booking Page
 import BookingForm from './pages/Booking/BookingForm';
 import PaymentsPage from './pages/Payment/Payment';
+import BookingsList from './pages/UserBookings/BookingList';
+import BookingDetails from './pages/UserBookings/BookingDetails';
 
 function App() {
   return (
@@ -43,6 +45,8 @@ function App() {
     <Routes>
         <Route path="/login" element={<Login/>} />
         <Route path="/payment" element={<PaymentsPage/>} />
+        <Route path="/userbooking" element={<><HeaderHome /><BookingsList/><FooterHome /></>} />
+        <Route path="/booking-details/:id" element={<><HeaderHome /><BookingDetails/><FooterHome /></>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/" element={
@@ -60,7 +64,12 @@ function App() {
           />
 
         <Route  element={<PrivateRoutes role="client"/>} >
-           <Route path="/changepassword" element={<ChangePassword/>} /> 
+           <Route path="/changepassword" element={
+            <>
+            <HeaderHome />
+            <ChangePassword/>
+            <FooterHome />
+            </>} /> 
         </Route> 
         <Route
           path="/foodmenu"
@@ -115,8 +124,9 @@ function App() {
           path="/userdashboard"
           element={
             <>
-              <NavbarUserDashboard />
+              <HeaderHome/>
               <UserDashboard />
+              <FooterHome />
             </>
           }
         /> 
