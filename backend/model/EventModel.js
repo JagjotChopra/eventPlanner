@@ -13,7 +13,16 @@ const eventSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        required: true
+        required: true,
+        set: function(val) {
+            // Set time to start of day (midnight) in UTC
+            if (val) {
+                const date = new Date(val);
+                date.setUTCHours(0, 0, 0, 0);
+                return date;
+            }
+            return val;
+        }
     },
     time_slot: {
         type: [String],
