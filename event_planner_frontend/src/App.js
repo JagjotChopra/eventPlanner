@@ -35,12 +35,14 @@ import VenuePage from './pages/EventVenue/VenuePage';
 
 // Booking Page
 import BookingForm from './pages/Booking/BookingForm';
+import PaymentsPage from './pages/Payment/Payment';
 
 function App() {
   return (
   <Router>
     <Routes>
         <Route path="/login" element={<Login/>} />
+        <Route path="/payment" element={<PaymentsPage/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/" element={

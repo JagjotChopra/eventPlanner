@@ -8,6 +8,7 @@ const eventCategoryRoutes = require('./routes/eventCategoryRoutes');
 const userDashboardRouter = require('./routes/userDashboardRoutes');
 const venueRoutes = require('./routes/venueRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 let server=express();
 
@@ -28,6 +29,7 @@ server.use('/api/v1/eventcategories', eventCategoryRoutes);
 server.use('/api/v1/user',userDashboardRouter);
 server.use('/api/v1/eventvenue', venueRoutes);
 server.use('/api/v1/booking', bookingRoutes);
+server.use('/api/v1/payments', paymentRoutes);
 
 //server things
 const PORT=9000;
