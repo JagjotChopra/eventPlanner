@@ -14,4 +14,10 @@ adminRouter.post('/AddEventVenue', adminController.upload.array('images', 10), a
 adminRouter.get('/GetEventVenue', adminController.getEventVenue);
 adminRouter.put('/UpdateVenue/:id',adminController.updateUpload.array('newImages', 10),adminController.updateEventVenue)
 adminRouter.delete('/DeleteEventVenue/:id', adminController.deleteEventVenue);
+adminRouter.get('/all-bookings', adminController.getAllBookings);
+adminRouter.put('/update-status/:id', adminController.updateBookingStatus);
+adminRouter.put('/update-datetime/:id', adminController.updateBookingDateTime);
+adminRouter.post('/check-availability', adminController.checkAvailability);
+
+
 module.exports = adminRouter;
