@@ -5,18 +5,25 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import Footer from '../Homepage/Footer';
+import HeaderHome from '../Homepage/Header';
 
 const stripePromise = loadStripe('pk_test_51OKFJrK06xPy6xcd28sE98ibkqridwPfqMMNDQYAaFJmwyT9ppiSXWbTdAOAHSQeO5z614izaVUIaMpdr8FBlLot002h7v1yJu');
 
 const PaymentsPage = () => {
     return (
-        <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5', padding: '48px 16px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+        <>
+        <HeaderHome/>
+         <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5', padding: '48px 16px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
             <div style={{ maxWidth: '500px', width: '100%' }}>
                 <Elements stripe={stripePromise}>
                     <CheckoutForm />
                 </Elements>
             </div>
         </div>
+        <Footer/>
+        </>
+       
     );
 };
 
@@ -66,6 +73,11 @@ const CheckoutForm = () => {
                     setPaymentSuccess(true);
                     setPaymentData(paymentIntent);
                     setBookingData(bookingResponse.data); // Set booking data for the receipt
+                    localStorage.removeItem('selectedVenue');
+                    localStorage.removeItem('formData');
+                    localStorage.removeItem('step');
+
+                    
                 } catch (error) {
                     alert("Error creating booking");
                 }
@@ -74,6 +86,23 @@ const CheckoutForm = () => {
             console.error('Error processing payment:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        try {
+            // Create a Date object and increment the day by 1
+            const date = new Date(dateString);
+            date.setDate(date.getDate() + 1);
+    
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        } catch (error) {
+            return 'Invalid Date';
         }
     };
 
@@ -92,7 +121,7 @@ const CheckoutForm = () => {
         doc.setFontSize(12);
         doc.setFont("helvetica", "normal");
         doc.setTextColor(100);
-        doc.text(`Transaction ID: ${paymentData.id}`, 14, 35);
+        doc.text(`Booking ID: ${bookingData.booking._id}`, 14, 35);
         doc.text(`Amount Paid: $${bookingData.booking.total_cost}`, 14, 42);
         doc.text(`Payment Date: ${new Date(paymentData.created * 1000).toLocaleString()}`, 14, 49);
 
@@ -111,11 +140,11 @@ const CheckoutForm = () => {
             ["Event Category", bookingData.category.name],
             ["Venue", bookingData.venue.venue_name],
             ["Venue Address", `${bookingData.venue.address.street}, ${bookingData.venue.address.city}, ${bookingData.venue.address.province} ${bookingData.venue.address.postalcode}, ${bookingData.venue.address.country}`],
-            ["Event Date", new Date(bookingData.event.date).toLocaleDateString()],
-            ["Time Slot", bookingData.event.time_slot.join(", ")],
+            ["Event Date", formatDate(bookingData.event.date) ],
+              ["Time Slot", bookingData.event.time_slot.join(", ")],
             ["Guest Number", bookingData.event.guest_number.toString()],
             ["Sitting Arrangement", bookingData.event.sitting_arrangement],
-            ["Menu Choice", bookingData.menuChoice || "N/A"],
+            ["Menu Choice", bookingData.event.menu_choice || "N/A"],
             ["Venue Cost (Incl Decoration)", `$${bookingData.booking.venue_cost}`],
             ["Food Cost", `$${bookingData.booking.food_cost || "0.00"}`],
             ["Total Cost", `$${bookingData.booking.total_cost}`],
@@ -140,8 +169,8 @@ const CheckoutForm = () => {
         doc.setFontSize(10);
         doc.setTextColor(120);
         doc.text("Thank you for choosing our event services! For questions, contact support@events.com", 14, doc.lastAutoTable.finalY + 20);
-
-        doc.save("payment-receipt.pdf");
+        doc.save(`booking-receipt-${bookingData.booking._id}.pdf`);
+        
     };
 
     const cardStyle = {

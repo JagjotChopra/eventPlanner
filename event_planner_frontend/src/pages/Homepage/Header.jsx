@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-scroll";
 import { NavLink, useNavigate} from 'react-router-dom'
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiHamburgerMenu,GiSpain } from "react-icons/gi";
  import { IoMdArrowDropdownCircle } from "react-icons/io";
  import { FaArrowRightToBracket } from "react-icons/fa6";
 import logo from '../../assets/R-removebg-preview.png'; // Adjust path as needed
@@ -12,21 +12,26 @@ const HeaderHome = () => {
     
     // const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
+    const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
     const navigate=useNavigate();
-    // Function to toggle dropdown visibility
-    // const toggleDropdown = () => {
-    //     setDropdownOpen(!dropdownOpen);
-    // };
+    const [venueDropdownOpen, setVenueDropdownOpen] = useState(false);
+    const toggleVenueDropdown = () => {
+        setVenueDropdownOpen(!venueDropdownOpen);
+        setCategoryDropdownOpen(false); // Close the other dropdown
+    };
 
     // Function to handle logout
     const logout = () => {
          const isConfirmed = window.confirm("Are you sure you want to logout?");
          if (isConfirmed) {
+            console.log('I am here')
             localStorage.removeItem('token');
             localStorage.removeItem('lastNavigationPath');
             localStorage.removeItem('selectedVenue');
-            navigate('/login');
-          //  window.location.href = '/login';
+            localStorage.removeItem('formData');
+            localStorage.removeItem('step');
+           //  navigate('/login');
+           window.location.href = '/login';
         }
     };
 
@@ -42,15 +47,31 @@ const HeaderHome = () => {
             <div className={showMenu ? "navLinks showMenu" : "navLinks"} style={linksContainerStyle}>
                 <div className="links" style={linksStyle}  >
                     {
-                        (UserAuth()=="admin")?<NavLink to="/adminDashboard" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+                        (UserAuth()=="admin")?<NavLink to="/adminDashboard"  style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
                         onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Dashboard</NavLink>
-                   :<NavLink to="/homepage" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+                   :<NavLink to="/homepage"  style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
              onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Home</NavLink>
                     }
                     <NavLink to={'/eventvenue'} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
              onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Venues</NavLink>
-                    <NavLink to="/foodmenu" spy={true} smooth={true} duration={500} style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
+                    <NavLink to="/foodmenu"style={linkStyle} onMouseEnter={(e) => e.target.style.Color = '#8f6930'}
              onMouseLeave={(e) => e.target.style.Color = '#a2783a'}>Food</NavLink>
+
+                 {
+                    (UserAuth()=="client")?<li className="navbar-dropdown" style={{position: "relative", listStyle: "none"}} onMouseEnter={toggleVenueDropdown} onMouseLeave={() => setVenueDropdownOpen(false)}>
+                    <span className="navbar-link dropdown-toggle">
+                        My Account <IoMdArrowDropdownCircle />
+                    </span>
+                    {venueDropdownOpen && (
+                        <ul className="dropdown-menu">
+                            <li><Link onClick={() => navigate('/userdashboard')} style={{cursor: "pointer"}} className="navbar-link">My Profile</Link></li>
+                            <li><Link onClick={() => navigate('/changepassword')} style={{cursor: "pointer"}} className="navbar-link">Change Password</Link></li>
+                            <li><Link onClick={() => navigate('/userbooking')} style={{cursor: "pointer"}} className="navbar-link">My Bookings</Link></li>
+                        </ul>
+                    )}
+                </li>:null
+                 }   
+
              {
                 (UserAuth()=="admin" ||UserAuth()=="client")?<NavLink style={logoutStyle}   onClick={logout}>
                 Logout <FaArrowRightToBracket style={{fontSize:'14px'}}/>

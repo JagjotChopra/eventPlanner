@@ -86,14 +86,14 @@ const UserDashboard = () => {
     return (
         <div style={{
             maxWidth: '500px',
-            margin: '0 auto',
+            margin: '20vh auto',
             padding: '20px',
             borderRadius: '8px',
             boxShadow: '0px 4px 12px rgba(0,0,0,0.1)',
             backgroundColor: '#FFFFFF',
             fontFamily: 'Arial, sans-serif',
             color: '#333',
-            marginTop:'100px'
+            
         }}>
             <h3 style={{
                 textAlign: 'center',
