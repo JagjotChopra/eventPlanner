@@ -8,21 +8,84 @@ import AdminAddCategory from './pages/Admin/AdminAddCategory';
 import PrivateRoutes from './PrivateRoutes';
 import AdminDashboard from './pages/AdminDashboard/adminDashboard';
 import AdminManageCategory from './pages/Admin/AdminManageCategory';
+
+import Navbar from './pages/FoodMenu/FoodMenu';
+import HeroSection from './pages/FoodMenu/HeroSection';
+import Services from "./pages/FoodMenu/Services";
+import Testimonials from "./pages/FoodMenu/About";
+import Contact from "./pages/FoodMenu/Contact";
+import Footer from "./pages/FoodMenu/Footer";
+
 import AdminAddVenue from './pages/AdminVenue/AdminAddVenue';
 import AdminManageVenue from './pages/AdminVenue/AdminManageVenue';
+
+// User Dashboard
+import UserDashboard from './pages/UserDashboard/UserDashboard';
+import NavbarUserDashboard from './pages/UserDashboard/ChangePassword';
+// HomePage
+import HeaderHome from './pages/Homepage/Header';
+import HeroSectionHome from './pages/Homepage/HeroSectionhome';
+import EventCategory from './pages/Homepage/EventCategory';
+import VenueSection from './pages/Homepage/VenueSection';
+import FoodDrinkSection from './pages/Homepage/FoodDrinkSection';
+import FooterHome from './pages/Homepage/Footer';
+import HomeDescription from './pages/Homepage/HomeDescription';
+import AboutHome from './pages/Homepage/AboutHome';
+import VenuePage from './pages/EventVenue/VenuePage';
+
+// Booking Page
+import BookingForm from './pages/Booking/BookingForm';
+import PaymentsPage from './pages/Payment/Payment';
 
 function App() {
   return (
   <Router>
     <Routes>
         <Route path="/login" element={<Login/>} />
+        <Route path="/payment" element={<PaymentsPage/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/" element={<Login/>} exact />
+        <Route path="/" element={
+            <>
+            <HeaderHome />
+            <HeroSectionHome />
+            <HomeDescription />
+            <EventCategory />
+            <VenueSection />
+            <FoodDrinkSection />
+            <AboutHome />
+            <FooterHome />
+            </>
+          }
+          />
 
         <Route  element={<PrivateRoutes role="client"/>} >
            <Route path="/changepassword" element={<ChangePassword/>} /> 
         </Route> 
+        <Route
+          path="/foodmenu"
+          element={
+            <>
+              <HeaderHome />
+              <HeroSection />
+              <Contact />
+              <Services />
+              <Testimonials />
+              <Footer />
+            </>
+          }
+        /> 
+
+<Route
+          path="/eventvenue"
+          element={
+            <>
+              <HeaderHome />
+              <VenuePage />
+              <FooterHome />
+            </>
+          }
+        /> 
 
         <Route  element={<PrivateRoutes role="admin"/>} >
            <Route path="/adminDashboard" element={<AdminDashboard/>} >
@@ -34,6 +97,39 @@ function App() {
            <Route path="adminManageVenue" element={<AdminManageVenue/>} /> 
         </Route> 
         </Route> 
+        <Route path="/homepage"
+          element={
+            <>
+            <HeaderHome />
+            <HeroSectionHome />
+            <HomeDescription />
+            <EventCategory />
+            <VenueSection />
+            <FoodDrinkSection />
+            <AboutHome />
+            <FooterHome />
+            </>
+          }
+        /> 
+        <Route
+          path="/userdashboard"
+          element={
+            <>
+              <NavbarUserDashboard />
+              <UserDashboard />
+            </>
+          }
+        /> 
+        <Route
+          path="/booking"
+          element={
+            <>
+              <HeaderHome />
+              <BookingForm />
+              <FooterHome />
+            </>
+          }
+        /> 
        
     </Routes>
   </Router>
