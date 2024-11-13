@@ -27,11 +27,12 @@ const bookedSlots = bookedEvents.flatMap(event => event.time_slot);
 const availableSlots = timeSlots.filter(slot => !bookedSlots.includes(slot));
             console.log(availableSlots);
             // Check the availability status based on booked slots
-            if (availableSlots.length === 0) {
-                res.json({ message: "The venue is fully booked on this date." });
-            } else {
-                res.json({ availableSlots });
-            }
+            // if (availableSlots.length === 0) {
+            //     res.json({ message: "The venue is fully booked on this date." });
+            // } else {
+            //     res.json({ availableSlots });
+            // }
+            res.status(200).json({ availableSlots });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
