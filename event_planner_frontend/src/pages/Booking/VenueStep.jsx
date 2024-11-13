@@ -11,8 +11,10 @@ const VenueStep = ({ formData, setFormData, onChange, availableVenues, onNext, o
             setVenue(selectedVenue);
         }
     }, []);
+
     // Validation function to check if all required fields are filled
     const isNextDisabled = () => {
+        console.log("Vapidation first chec",formData);
         const hasErrors = Object.values(validationErrors).some(error => error);
         return !formData.venueId || 
                !formData.categoryId || 
@@ -57,6 +59,7 @@ const VenueStep = ({ formData, setFormData, onChange, availableVenues, onNext, o
                         formData={formData}
                         venue_id={venue?._id}
                         setValidationErrors={setValidationErrors}
+                        isNextDisabled={isNextDisabled}
                     />
                 </div>
             </div>

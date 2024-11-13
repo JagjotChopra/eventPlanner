@@ -1,11 +1,18 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-const DateTimeStep = ({ formData, venue_id, setFormData }) => {
+import { useNavigate } from 'react-router-dom';
+const DateTimeStep = ({ formData, venue_id, setFormData, isNextDisabled }) => {
     const [selectedDate, setSelectedDate] = useState(formData.date || '');
     const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
     const [selectedSlots, setSelectedSlots] = useState(formData.timeSlot || []);
     const [options, setOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState(formData.categoryId || '');
     const [formError, setFormError] = useState({});
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log("availableTimeSlots updated:", availableTimeSlots);
+    }, [availableTimeSlots]);
     // Fetch event categories and restore selections from localStorage
     useEffect(() => {
         const fetchDataAndRestore = async () => {
@@ -16,7 +23,7 @@ const DateTimeStep = ({ formData, venue_id, setFormData }) => {
                 setOptions(data);
                 // Restore data from localStorage
                 const savedFormData = JSON.parse(localStorage.getItem('formData') || '{}');
-                
+
                 // Restore category selection
                 if (savedFormData.categoryId) {
                     setSelectedOption(savedFormData.categoryId);
@@ -32,38 +39,85 @@ const DateTimeStep = ({ formData, venue_id, setFormData }) => {
                 }
                 // Restore time slots
                 if (savedFormData && Array.isArray(savedFormData.timeSlot) && savedFormData.timeSlot.length > 0) {
+                    console.log("-----", savedFormData.date)
                     setSelectedSlots(savedFormData.timeSlot);
                     setFormData(prevData => ({
                         ...prevData,
                         timeSlot: savedFormData.timeSlot
                     }));
+
                 }
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
+
         };
         fetchDataAndRestore();
     }, []);
+
+
+
+
     const fetchTimeSlots = async (date) => {
         try {
+            let data = {
+                venue_id: formData.venueId,
+                date: date
+            }
             const token = localStorage.getItem('token');
-            const response = await fetch("http://localhost:9000/api/v1/booking/check-availability", {
-                method: "POST",
+            const response = await axios.post("http://localhost:9000/api/v1/booking/check-availability", data, {
                 headers: {
                     "Content-Type": "application/json",
                     'authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    venue_id,
-                    date: date
-                })
+
             });
-            if (response.ok) {
-                const data = await response.json();
-                console.log("I'm Here", data.availableSlots)
-                setAvailableTimeSlots(data.availableSlots);
+            console.log(response);
+            if (response.status == "200") {
+                const data = response.data;
+                console.log("I'm Here", data.availableSlots, "venue id ", venue_id)
+                if (data.availableSlots.length > 0) {
+                    setAvailableTimeSlots(data.availableSlots);
+                    setFormData({ ...formData, timeSlot: [] });
+                    setSelectedSlots([])
+                }
+                else {
+                    setAvailableTimeSlots([]);
+                    alert("The venue is fully booked on this date");
+                    setFormData({ ...formData, timeSlot: [] });
+
+                    setSelectedSlots([])
+
+                }
             }
         } catch (error) {
+            if (error.response) {
+                const { status } = error.response;
+                let message;
+
+                // Set messages based on response status
+                switch (status) {
+                    case 401:
+                        message = "Invalid token or no token provided.";
+                        alert("Need To Login Again"); // Show the message to the user
+                        localStorage.removeItem('token');
+                        navigate('/login');
+                        break;
+                    case 403:
+                        message = "Access denied. You do not have permission to perform this action.";
+                        alert("Need To Login Again"); // Show the message to the user
+                        localStorage.removeItem('token');
+                        navigate('/login');
+                        break;
+                }
+
+
+
+            } else {
+                console.log("err",error)
+                alert("Server is Down. Please Try Later");
+            }
             console.error("Error fetching time slots:", error);
         }
     };
@@ -79,9 +133,9 @@ const DateTimeStep = ({ formData, venue_id, setFormData }) => {
     const handleDateChange = async (e) => {
         const date = e.target.value;
         setSelectedDate(date);
-        
+
         await fetchTimeSlots(date);
-        
+
         setFormData(prevData => {
             const newData = { ...prevData, date };
             localStorage.setItem('formData', JSON.stringify(newData));
@@ -105,63 +159,63 @@ const DateTimeStep = ({ formData, venue_id, setFormData }) => {
             return newSlots;
         });
     };
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let isValid = true;
-        // Validate category selection
-        if (!selectedOption) {
-            setFormError(prevError => ({
-                ...prevError,
-                categoryId: 'Please select an event category'
-            }));
-            isValid = false;
-        } else {
-            setFormError(prevError => ({
-                ...prevError,
-                categoryId: ''
-            }));
-        }
-        // Validate date selection
-        if (!selectedDate) {
-            setFormError(prevError => ({
-                ...prevError,
-                date: 'Please select a date for your event'
-            }));
-            isValid = false;
-        } else {
-            setFormError(prevError => ({
-                ...prevError,
-                date: ''
-            }));
-        }
-        // Validate time slot selection
-        if (selectedSlots.length === 0) {
-            setFormError(prevError => ({
-                ...prevError,
-                timeSlot: 'Please select at least one time slot'
-            }));
-            isValid = false;
-        } else {
-            setFormError(prevError => ({
-                ...prevError,
-                timeSlot: ''
-            }));
-        }
-        if (isValid) {
-            // Form is valid, you can proceed with the submission
-            console.log('Form is valid:', formData);
-        }
-    };
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     let isValid = true;
+    //     // Validate category selection
+    //     if (!selectedOption) {
+    //         setFormError(prevError => ({
+    //             ...prevError,
+    //             categoryId: 'Please select an event category'
+    //         }));
+    //         isValid = false;
+    //     } else {
+    //         setFormError(prevError => ({
+    //             ...prevError,
+    //             categoryId: ''
+    //         }));
+    //     }
+    //     // Validate date selection
+    //     if (!selectedDate) {
+    //         setFormError(prevError => ({
+    //             ...prevError,
+    //             date: 'Please select a date for your event'
+    //         }));
+    //         isValid = false;
+    //     } else {
+    //         setFormError(prevError => ({
+    //             ...prevError,
+    //             date: ''
+    //         }));
+    //     }
+    //     // Validate time slot selection
+    //     if (selectedSlots.length === 0) {
+    //         setFormError(prevError => ({
+    //             ...prevError,
+    //             timeSlot: 'Please select at least one time slot'
+    //         }));
+    //         isValid = false;
+    //     } else {
+    //         setFormError(prevError => ({
+    //             ...prevError,
+    //             timeSlot: ''
+    //         }));
+    //     }
+    //     if (isValid) {
+    //         // Form is valid, you can proceed with the submission
+    //         console.log('Form is valid:', formData);
+    //     }
+    // };
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form >
                 <div style={styles.stepContainer}>
                     <h3 style={styles.heading}>Select Event Category</h3>
-                    <select 
-                        id="dropdown" 
-                        style={styles.select} 
-                        value={selectedOption} 
-                        onChange={handleSelectChange} 
+                    <select
+                        id="dropdown"
+                        style={styles.select}
+                        value={selectedOption}
+                        onChange={handleSelectChange}
                         required
                     >
                         <option value="" disabled>Select an option</option>
@@ -192,6 +246,7 @@ const DateTimeStep = ({ formData, venue_id, setFormData }) => {
                         )}
                         <p style={styles.helperText}>Please select a date for your event</p>
                     </div>
+
                     {availableTimeSlots.length > 0 && (
                         <div style={styles.inputGroup}>
                             <label style={styles.label}>Time Slot</label>
@@ -220,7 +275,7 @@ const DateTimeStep = ({ formData, venue_id, setFormData }) => {
                         </div>
                     )}
                 </div>
-                
+
             </form>
         </>
     );
