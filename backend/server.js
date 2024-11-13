@@ -9,12 +9,25 @@ const userDashboardRouter = require('./routes/userDashboardRoutes');
 const venueRoutes = require('./routes/venueRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
-
+const Redis = require('ioredis');
 let server=express();
 
 //dbConnecting
 DBConnection();
 require('dotenv').config();
+
+const redis = new Redis({
+    host: '127.0.0.1', // Default Redis host (change if different)
+    port: 6379,        // Default Redis port
+  });
+// Log connection events
+redis.on('connect', () => {
+    console.log('Connected to Redis');
+  });
+  
+redis.on('error', (err) => {
+    console.error('Redis error:', err);
+  });
 
 // using middlewares
 server.use(cors());
