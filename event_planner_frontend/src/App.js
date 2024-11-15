@@ -8,7 +8,7 @@ import AdminAddCategory from './pages/Admin/AdminAddCategory';
 import PrivateRoutes from './PrivateRoutes';
 import AdminDashboard from './pages/AdminDashboard/adminDashboard';
 import AdminManageCategory from './pages/Admin/AdminManageCategory';
-
+import AdminBookings from './pages/Admin/AdminBookings';
 import Navbar from './pages/FoodMenu/FoodMenu';
 import HeroSection from './pages/FoodMenu/HeroSection';
 import Services from "./pages/FoodMenu/Services";
@@ -36,6 +36,7 @@ import VenuePage from './pages/EventVenue/VenuePage';
 // Booking Page
 import BookingForm from './pages/Booking/BookingForm';
 import PaymentsPage from './pages/Payment/Payment';
+// UserBookings Page
 import BookingsList from './pages/UserBookings/BookingList';
 import BookingDetails from './pages/UserBookings/BookingDetails';
 
@@ -45,10 +46,10 @@ function App() {
     <Routes>
         <Route path="/login" element={<Login/>} />
         <Route path="/payment" element={<PaymentsPage/>} />
-        <Route path="/userbooking" element={<><HeaderHome /><BookingsList/><FooterHome /></>} />
-        <Route path="/booking-details/:id" element={<><HeaderHome /><BookingDetails/><FooterHome /></>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/userbooking" element={<><HeaderHome /><BookingsList/><FooterHome /></>} />
+        <Route path="/booking-details/:id" element={<><HeaderHome /><BookingDetails/><FooterHome /></>} />
         <Route path="/" element={
             <>
             <HeaderHome />
@@ -64,7 +65,7 @@ function App() {
           />
 
         <Route  element={<PrivateRoutes role="client"/>} >
-           <Route path="/changepassword" element={
+        <Route path="/changepassword" element={
             <>
             <HeaderHome />
             <ChangePassword/>
@@ -103,6 +104,8 @@ function App() {
            <Route path="adminChangepassword" element={<ChangePassword/>} /> 
            <Route path="adminManageCategory" element={<AdminManageCategory/>} /> 
            <Route path="adminAddVenue" element={<AdminAddVenue/>} /> 
+           <Route path="adminBooking" element={<AdminBookings />} />
+      
            <Route path="adminManageVenue" element={<AdminManageVenue/>} /> 
         </Route> 
         </Route> 
@@ -121,15 +124,15 @@ function App() {
           }
         /> 
         <Route
-          path="/userdashboard"
-          element={
-            <>
-              <HeaderHome/>
-              <UserDashboard />
-              <FooterHome />
-            </>
-          }
-        /> 
+         path="/userdashboard"
+         element={
+           <>
+             <HeaderHome/>
+             <UserDashboard />
+             <FooterHome />
+           </>
+         }
+       /> 
         <Route
           path="/booking"
           element={

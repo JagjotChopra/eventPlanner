@@ -46,7 +46,7 @@ const NavbarUserDashboard = () => {
                         color: '#ECF0F1',
                         fontSize: '24px',
                         fontWeight: '600',
-                        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                        fontFamily: "'Cinzel Decorative', Tahoma, Geneva, Verdana, sans-serif",
                         cursor: 'pointer',
                         margin: 0,
                         transition: 'color 0.3s ease',
@@ -69,6 +69,7 @@ const NavbarUserDashboard = () => {
                     to="/changepassword"
                     style={{
                         padding: '10px 20px',
+                        fontFamily: "'Cinzel Decorative', Tahoma, Geneva, Verdana, sans-serif",
                         color: '#ECF0F1',
                         backgroundColor: '#3498DB',
                         textDecoration: 'none',
@@ -92,6 +93,7 @@ const NavbarUserDashboard = () => {
                     onClick={logout} 
                     style={{
                         color: 'black',
+                        fontFamily: "'Cinzel Decorative', Tahoma, Geneva, Verdana, sans-serif",
                         background: "white",
                         padding: "10px 15px",
                         fontSize: "16px",

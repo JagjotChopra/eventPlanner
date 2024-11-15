@@ -3,7 +3,6 @@ const ConfirmationStep = ({ formData,setFormData, onSubmit, onPrev, isLoading })
     
     const [totalCost,setTotalCost]=useState(0);
     const selectedVenue=JSON.parse(localStorage.getItem("selectedVenue"));
-   
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         try {
@@ -32,7 +31,6 @@ const ConfirmationStep = ({ formData,setFormData, onSubmit, onPrev, isLoading })
             venueCost = venueCost * 2;
             foodCost = foodCost * 2;
         }
-    
         // Calculate the total cost including venue and (if applicable) food cost
         const total = venueCost + foodCost;
     
