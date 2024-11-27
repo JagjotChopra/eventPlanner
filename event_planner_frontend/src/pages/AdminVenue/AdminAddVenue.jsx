@@ -170,7 +170,7 @@ const AdminAddVenue = () => {
   return (
    <div style={{padding:'25px 0px'}}> 
    
- <form  style={{ maxWidth: '800px', margin: '0px auto', background:'white', padding: '20px 50px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
+ <form onSubmit={handleSubmit}  style={{ maxWidth: '800px', margin: '0px auto', background:'white', padding: '20px 50px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
       
       <h3 style={{textAlign:'center'}}>Add Event Venue</h3>
       <label style={{ display: 'block', marginBottom: '10px' }}>
@@ -263,7 +263,7 @@ const AdminAddVenue = () => {
       </div>
 
       {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
-      <button type="button" onClick={handleSubmit}  className='submit-btn' style={{ marginTop: '40px', marginBottom: '40px' }}>
+      <button type="submit"   className='submit-btn' style={{ marginTop: '40px', marginBottom: '40px' }}>
         Add Venue
       </button>
     </form> 
