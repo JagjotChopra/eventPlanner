@@ -26,6 +26,7 @@ const UserDashboard = () => {
                 });
                 
                 if (response.status === 200) {
+               //     alert(response.data.data);
                     setUser(response.data.data);
                 }
             } catch (error) {
@@ -67,19 +68,47 @@ const UserDashboard = () => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
 
+    
+    const validateFields = () => {
+        let msg = "";
+    
+        // Validate user.name to allow only alphabetic characters and spaces
+        const nameRegex = /^[A-Za-z\s]+$/; // Allows letters and spaces
+        if (!nameRegex.test(user.name.trim())) {
+           // alert(user.name);
+            msg += 'Name must contain only alphabetic characters and spaces.\n';
+        }
+    
+        // Phone validation (must be digits, 10 characters)
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(user.phone)) {
+            msg += 'Phone number must be 10 digits long.\n';
+        }
+    
+        return msg;
+    };
+    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const token = localStorage.getItem('token');
-            await axios.put('http://localhost:9000/api/v1/user/profile', user, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-            setEditMode(false);
-        } catch (error) {
-            console.error("Error updating profile:", error);
-            alert("Failed to update profile. Please try again.");
+        let msg=validateFields();
+
+        if(msg!==""){
+            alert(msg);
+        }
+        else{
+            try {
+                const token = localStorage.getItem('token');
+                await axios.put('http://localhost:9000/api/v1/user/profile', user, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
+                setEditMode(false);
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                alert("Failed to update profile. Please try again.");
+            }
         }
     };
 
@@ -161,6 +190,7 @@ const UserDashboard = () => {
                         <input 
                             type="email" 
                             name="email" 
+                            readOnly
                             value={user.email} 
                             onChange={handleChange} 
                             style={{

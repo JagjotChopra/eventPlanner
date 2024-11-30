@@ -28,7 +28,7 @@ const cacheMiddleware = (keyGenerator) => async (req, res, next) => {
         if(cacheKey=="eventCategory"){
             console.log("clearing cache category data")
             await redis.del('myEndpoint:/api/v1/eventcategories');
-            await redis.del('myEndpoint:/api/v1/admin/eventcategories');
+            await redis.del('myEndpoint:/api/v1/admin/EventCategory');
            
         }
         if(cacheKey=="eventVenue"){

@@ -5,7 +5,7 @@ import logo from '../../assets/R-removebg-preview.png';
 import check from '../../assets/check.png';
 import cross from '../../assets/remove.png';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -21,6 +21,7 @@ const Register = () => {
         setErrors({ ...errors, [e.target.name]: '' }); // Clear errors as user types
     
      };
+     const navigate=useNavigate();
 
       // Validation function
     const validateFields = () => {
@@ -61,9 +62,10 @@ const Register = () => {
             // Check if registration was successful
             if (res.status === 201) { // Assuming 201 is the status code for successful registration
                 //alert(res.data.msg);
-                setModelMessage(res.data);
-                setShowModal(true);
-                //navigate('/login'); // Navigate to the login page on success
+            //    setModelMessage(res.data);
+              //  setShowModal(true);
+               alert(res.data.msg);
+                navigate('/login'); // Navigate to the login page on success
             }
         } catch (err) {
             //alert('Error during registration');
